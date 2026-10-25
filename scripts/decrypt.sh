@@ -17,7 +17,12 @@ fi
 
 tmp="$(mktemp)"
 trap 'rm -f "$tmp"' EXIT
-age -d -i "$key" -o "$tmp" encrypted/site.tar.gz.age
+# Stream to the temp file (works with every age version; some older ones mishandle -o on an existing file).
+age -d -i "$key" encrypted/site.tar.gz.age > "$tmp"
+if [ ! -s "$tmp" ] || ! gzip -t "$tmp" 2>/dev/null; then
+  echo "Decryption produced no valid archive (age $(age --version 2>/dev/null || echo '?')). Check the key file and try: age -d -i \"$key\" encrypted/site.tar.gz.age | tar -tz | head" >&2
+  exit 1
+fi
 rm -rf "$out"
 mkdir -p "$out"
 tar -xzf "$tmp" -C "$out"

@@ -13,6 +13,6 @@ tmp="$(mktemp)"
 trap 'rm -f "$tmp"' EXIT
 # Deterministic-ish tarball: sorted names, fixed owner, no mtime noise from the host.
 tar --sort=name --owner=0 --group=0 --numeric-owner --mtime='2026-01-01 00:00:00' -czf "$tmp" -C src .
-age -R keys/recipient.txt -o encrypted/site.tar.gz.age "$tmp"
+age -R keys/recipient.txt < "$tmp" > encrypted/site.tar.gz.age
 sha256sum encrypted/site.tar.gz.age | tee encrypted/site.tar.gz.age.sha256
 echo "Encrypted $(tar -tzf "$tmp" | grep -c -v '/$') files into encrypted/site.tar.gz.age"
