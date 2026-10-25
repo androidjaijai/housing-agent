@@ -1,0 +1,8 @@
+# Plaintext source and decrypted output never go to GitHub — only encrypted/site.tar.gz.age does.
+/src/
+/site/
+# Private keys must never be committed.
+*private-key*
+*.key
+age-key*.txt
+.DS_Store
