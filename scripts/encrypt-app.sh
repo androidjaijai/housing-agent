@@ -18,7 +18,7 @@ tar --sort=name --owner=0 --group=0 --numeric-owner --mtime='2026-01-01 00:00:00
   --exclude='./storage/logs/*.log' --exclude='./storage/framework/cache/data/*' \
   --exclude='./storage/framework/sessions/*' --exclude='./storage/framework/views/*.php' \
   --exclude='./storage/app/public/*' --exclude='./public/storage' --exclude='./bootstrap/cache/*.php' \
-  --exclude='./.phpunit.cache' --exclude='./tests/Browser/screenshots' \
+  --exclude='./.phpunit.cache' --exclude='./.phpunit.result.cache' --exclude='./tests/Browser/screenshots' \
   -czf "$tmp" -C app-src .
 
 hash="$(sha256sum "$tmp" | cut -d' ' -f1)"

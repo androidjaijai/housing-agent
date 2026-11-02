@@ -71,3 +71,23 @@ cost +US$8.39. Known gap: on /about with several agents, two sections still use 
 Session usage counter delta (end of phase 3 → end of phase 4): output +171,621 · cache read +32.68M · cache write +0.56M ·
 cost +US$8.51. Notes: AVD/LTV defaults must be verified with IRD/HKMA before launch; alert confirm/unsubscribe act on GET.
 | 5 | Agent (Sonnet): security headers + CSP, HTTPS/proxies, /health + heartbeat, backups (schedule, disk), cache headers, deploy kit (nginx, supervisor, cron, deploy.sh, .env.production.example), OPERATIONS.md, 11 tests | 00:18 | ~00:25 | 6m06s | Sonnet | 116,248 |
+| 5 | Integration: 385/385 tests; decrypt → fresh folder → tests 385/385 and source identical; fixed health tests depending on host disk space; excluded .phpunit.result.cache from the archive | 00:25 | 00:45:44 | ~20m (incl. a 9m12s composer install through the proxy) | Opus | |
+
+**Phase 5 total:** 00:17:54 → 00:45:44. Sub-agent (Sonnet) exact: 116,248.
+Session usage counter delta (end of phase 4 → end of phase 5): output +43,019 · cache read +16.62M · cache write +0.13M · cost +US$4.10.
+
+---
+
+# Totals for "finish the rest" (2026-11-02 22:46:10 → 2026-11-03 00:45:44, 1h59m34s)
+
+| Phase | Release | Wall time | Tests at release | Sonnet tokens (exact) | Session counter cost delta |
+|---|---|---|---|---|---|
+| 1 MVP gaps | claude/release/v0.2.0 | 22:46 → 23:14 (28m) | 179 | 586,277 | US$14.94 |
+| 2 Growth | claude/release/v0.3.0 | 23:15 → 23:38 (23m) | 254 | 599,986 | US$12.90 |
+| 3 Multi-agent | claude/release/v0.4.0 | 23:39 → 23:56 (17m) | 300 | 470,336 | US$8.39 |
+| 4 Later | claude/release/v0.5.0 | 23:57 → 00:17 (19m) | 374 | 529,807 | US$8.51 |
+| 5 Operations | claude/release/v0.6.0 | 00:17 → 00:45 (28m) | 385 | 116,248 | US$4.10 |
+| **Total** | | **~2h** | **385** | **2,302,654** | **US$48.84** |
+
+Session counter (22:38 baseline → end): output +823,507 · cache read +174.85M · cache write +3.10M. The counter is the whole
+session (it may include sub-agent traffic), so treat the cost column as an upper bound for this work.
