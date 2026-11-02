@@ -62,3 +62,4 @@ cost +US$12.90. Known gap: listing import accepts CSV only (Filament 5 ImportAct
 Session usage counter delta (end of phase 2 → end of phase 3): output +141,028 · cache read +34.09M · cache write +0.50M ·
 cost +US$8.39. Known gap: on /about with several agents, two sections still use first-person copy.
 | 4 | Branch, migration (saved searches, redirects, landlord report fields), SavedSearch/Redirect models, contract | 23:57 | 23:57:52 | | Opus | |
+| 4 | Agent C (Sonnet): saved-search alerts (double opt-in, hourly digest), landlord report + signed URL + monthly mail, mortgage + AVD stamp duty calculators, redirect manager + middleware + slug-change redirects, locale:add command, tests | 23:59 | ~00:08 | (pending) | Sonnet | (pending) |
