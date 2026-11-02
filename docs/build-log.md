@@ -52,3 +52,4 @@ cache read +40.36M · cache write +1.21M · cost +US$14.94.
 **Phase 2 total:** 23:15:25 → 23:38:33. Sub-agents (Sonnet) exact: 599,986 (C 151,081 + A 196,010 + B 252,895).
 Session usage counter delta (end of phase 1 → end of phase 2): output +232,776 · cache read +51.11M · cache write +0.70M ·
 cost +US$12.90. Known gap: listing import accepts CSV only (Filament 5 ImportAction has no XLSX reader); exports offer CSV + XLSX.
+| 3 | Branch, migration (agent profiles, routing pointer, commissions), Agent/Commission models, second demo agent + assistant, contract | 23:39:10 | 23:40:33 | | Opus | |
