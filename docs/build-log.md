@@ -38,3 +38,8 @@ cache write 2,925,496 · input 5,811 · cost US$47.96.
 | 1 | Agent C (Sonnet): Money/萬 format, ImageProcessor WebP+watermark, SeoData JSON-LD, Spam honeypot+Turnstile, Scout, schedule commands, enquiry confirmation mail, 30 tests | 22:50 | ~22:56 | 5m40s | Sonnet | 119,222 |
 | 1 | Agent A (Sonnet): sale mode, estate filter, video embed, money format, featured + testimonials, srcset, sitemap/robots/JSON-LD, cookie consent + GA4, spam, legal pages, 23 new tests | 22:50 | ~23:01 | 10m39s | Sonnet | 217,128 |
 | 1 | Agent B (Sonnet): sale/video/featured/schedule/private owner fields/consent doc/per-field 简 in form, WebP photos, preview page, CSV+XLSX exports, featured page, testimonials, media library, password reset, 2FA, session timeout, 41 new tests | 22:50 | ~23:09 | 18m19s | Sonnet | 249,927 |
+| 1 | Integration: 179/179 tests, browser pass (9 public pages × 3 locales × 2 widths + 19 admin pages × 2 widths), enquiry → admin, robots.txt fix, demo sale listings + featured, breadcrumb, 3 tests made seed-independent | 23:09 | 23:14:30 | ~ | Opus | |
+
+**Phase 1 total:** 22:46:10 → 23:14:30. Sub-agents (Sonnet) exact: 586,277 (C 119,222 + A 217,128 + B 249,927).
+Session usage counter delta (22:38 → end of phase 1; the counter may also include sub-agent traffic): output +235,063 ·
+cache read +40.36M · cache write +1.21M · cost +US$14.94.
