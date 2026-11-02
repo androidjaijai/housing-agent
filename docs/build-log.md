@@ -47,3 +47,8 @@ cache read +40.36M · cache write +1.21M · cost +US$14.94.
 | 2 | Agent C (Sonnet): Slugger+observers, ClaudeTranslator (SDK, effort low, json schema, fallbacks default), glossary-aware OpenCC, PublishRules, ViewingScheduler, LeadDuplicates, Reports, SocialPost, CSV row importer, 5 scheduled commands + notifications, 40 tests | 23:20 | ~23:29 | 7m14s | Sonnet | 151,081 |
 | 2 | Agent A (Sonnet): slugged URLs + 301, district/estate guide pages, guides & blog, viewing booking (Livewire), recently viewed, AI-draft fallback, sitemap, 18 new tests | 23:20 | ~23:32 | 11m29s | Sonnet | 196,010 |
 | 2 | Agent B (Sonnet): activity log, price history, reports + CSV, viewing calendar, CSV import, copy-as-post, AI draft/approve, publish rules, duplicates, posts, glossary, district/estate guides, settings, 17 new tests | 23:20 | ~23:35 | 14m55s | Sonnet | 252,895 |
+| 2 | Integration: canonical slug URLs in SEO/WhatsApp/social posts, test helper clash, 254/254 tests, browser pass (14 public pages × 3 locales × 2 widths + 27 admin pages × 2 widths) | 23:37 | 23:38:33 | ~ | Opus | |
+
+**Phase 2 total:** 23:15:25 → 23:38:33. Sub-agents (Sonnet) exact: 599,986 (C 151,081 + A 196,010 + B 252,895).
+Session usage counter delta (end of phase 1 → end of phase 2): output +232,776 · cache read +51.11M · cache write +0.70M ·
+cost +US$12.90. Known gap: listing import accepts CSV only (Filament 5 ImportAction has no XLSX reader); exports offer CSV + XLSX.
