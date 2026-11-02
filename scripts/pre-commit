@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# Git pre-commit hook: encrypt plaintext sources before every commit and refuse to commit plaintext or keys.
+# Install with: scripts/install-hooks.sh
+set -euo pipefail
+root="$(git rev-parse --show-toplevel)"
+cd "$root"
+
+# 1. Re-encrypt whatever plaintext source exists locally, and stage the result.
+if [ -d app-src ]; then
+  scripts/encrypt-app.sh >/dev/null
+  git add encrypted/laravel.tar.gz.age encrypted/laravel.tar.gz.age.sha256
+fi
+if [ -d src ]; then
+  scripts/encrypt.sh >/dev/null
+  git add encrypted/site.tar.gz.age encrypted/site.tar.gz.age.sha256
+fi
+
+# 2. Block plaintext source and private keys.
+bad=0
+while IFS= read -r f; do
+  case "$f" in
+    app-src/*|src/*|site/*) echo "pre-commit: refusing plaintext source file: $f" >&2; bad=1 ;;
+    *private-key*|*.key) echo "pre-commit: refusing key file: $f" >&2; bad=1 ;;
+  esac
+  if [ -f "$f" ] && grep -qE "AGE-SECRET-KEY-1[0-9A-Z]{50,}" "$f" 2>/dev/null; then
+    echo "pre-commit: $f contains an age PRIVATE key. Remove it." >&2; bad=1
+  fi
+done < <(git diff --cached --name-only --diff-filter=ACMR)
+[ "$bad" = 0 ] || { echo "Commit blocked. Only encrypted/ files, scripts, docs and the public key belong in this repo." >&2; exit 1; }
+exit 0

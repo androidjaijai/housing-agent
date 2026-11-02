@@ -1,5 +1,6 @@
-# Plaintext source and decrypted output never go to GitHub — only encrypted/site.tar.gz.age does.
+# Plaintext source and decrypted output never go to GitHub; only the files in encrypted/ do.
 /src/
+/app-src/
 /site/
 # Private keys must never be committed.
 *private-key*
