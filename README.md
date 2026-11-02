@@ -1,73 +1,85 @@
-# Housing Agent: interactive demo (encrypted)
+# Housing Agent: Hong Kong rental agent website (encrypted)
 
-An interactive demo website for a Hong Kong residential rental agent: urban districts (港島 · 九龍), rentals first, in 繁 / 简 / EN. It's plain HTML, CSS and JavaScript with no build step, and includes:
+This repository contains two encrypted projects:
 
-- **Public site:** home with search, rentals search (live filters, map view, shareable links), listing detail (gallery lightbox, enquiry form, WhatsApp pre-fill), landlord sign-up form, moving-in cost and affordability calculators, agent profile, saved flats, and mobile layout with a bottom tab bar.
-- **Admin panel (demo):** dashboard, listings table with bulk actions, listing editor (language tabs, 繁 → 简 auto-convert, photos), leads pipeline (table and kanban), lead detail, and a translation centre. Everything is stored in the browser's `localStorage`; a "Reset demo data" button clears it.
+| Encrypted file | What it is | Decrypt with |
+|---|---|---|
+| `encrypted/laravel.tar.gz.age` | **The real application:** Laravel 13 + Filament 5 + Livewire 4, 繁 / 简 / EN | `scripts/decrypt-app.sh` |
+| `encrypted/site.tar.gz.age` | The earlier static HTML click-through demo | `scripts/decrypt.sh` |
 
-All listings, names and numbers are samples. Drawings stand in for real photos.
+Both are encrypted with [age](https://age-encryption.org) to the public key in `keys/recipient.txt`. Only the matching **private key** can decrypt them, and that key is not in this repository.
 
-## The source is encrypted
+## 1. Decrypt and run the Laravel app
 
-This repository contains **only the encrypted site**:
-
-| Path | What it is |
-|---|---|
-| `encrypted/site.tar.gz.age` | The whole HTML site, encrypted with [age](https://age-encryption.org) |
-| `encrypted/site.tar.gz.age.sha256` | Checksum, verified before decrypting |
-| `keys/recipient.txt` | Public key used to encrypt (safe to share) |
-| `scripts/decrypt.sh` / `scripts/encrypt.sh` | Helper scripts |
-
-The matching **private key is not in this repository**. Without it the files can't be read.
-
-### Decrypt and open the demo
-
-Requirements: `age`, `tar` and `python3` (`brew install age` on macOS, `apt install age` on Debian/Ubuntu).
+Requirements: PHP 8.3+ with `pdo_sqlite`, `mbstring`, `intl`, `gd` and `zip`; Composer 2; `age`.
 
 ```bash
-# 1. Decrypt with your private key (writes the site to ./site)
-scripts/decrypt.sh /path/to/housing-agent-private-key.txt
+git clone -b claude/interactive-demo https://github.com/androidjaijai/housing-agent.git
+cd housing-agent
+scripts/decrypt-app.sh ~/path/to/housing-agent-private-key.txt   # → app-src/
+cd app-src
+composer install
+cp -n .env.example .env && php artisan key:generate
+touch database/database.sqlite && php artisan migrate --seed
+php artisan storage:link
+php artisan serve                   # http://127.0.0.1:8000
+```
 
-# 2. Serve it locally and open http://localhost:8000
+- **Public site:** http://127.0.0.1:8000. It redirects to `/zh-hk`, `/zh-cn` or `/en` based on your browser's language.
+- **Admin panel:** http://127.0.0.1:8000/admin. Demo login `admin@example.com` / `password`. **Change it before going live.**
+- **Tests:** `php artisan test` (87 Pest tests).
+- **MySQL:** set the `DB_*` values in `.env`, then run `php artisan migrate --seed`.
+- **Placeholders to replace:** agency name, licence numbers, office address and WhatsApp number. Edit them in the admin under **Settings**, or in `database/seeders/data/demo.json` before seeding.
+
+There is no npm or Vite step. The public pages use plain CSS in `public/css/`, and Filament and Livewire ship their own compiled assets.
+
+## 2. Work on the code: encryption happens on every commit
+
+Install the git hook once after cloning:
+
+```bash
+scripts/install-hooks.sh
+```
+
+From then on, every `git commit`:
+
+1. Re-encrypts `app-src/` into `encrypted/laravel.tar.gz.age` (and `src/` into `encrypted/site.tar.gz.age` if present), then stages the result.
+2. Refuses the commit if any plaintext source (`app-src/`, `src/`, `site/`) or any age private key is staged.
+
+`app-src/`, `src/` and `site/` are git-ignored, so plaintext never reaches GitHub. The archives exclude `vendor/`, `node_modules/`, `.env`, SQLite databases, logs and caches. Run `composer install` after decrypting.
+
+For long sessions, `scripts/autosave.sh [seconds] [times]` encrypts, commits and pushes on a timer.
+
+**To give a colleague access:** add their age public key (`age1…`) as a new line in `keys/recipient.txt`, then commit; the hook re-encrypts. Run `FORCE=1 scripts/encrypt-app.sh` to re-encrypt without code changes.
+
+## 3. The static HTML demo
+
+```bash
+scripts/decrypt.sh ~/path/to/housing-agent-private-key.txt   # → site/
 python3 -m http.server 8000 -d site
 ```
 
-Open `http://localhost:8000/admin/` for the admin panel.
+## What's in the Laravel app
 
-Without the scripts, the equivalent commands are:
+- **Public site** (Blade + Livewire):
+  - **Home:** search card and district tiles.
+  - **Rentals:** live filters synced to the URL (district, MTR line/station, rent, size, bedrooms, features, keyword in any language), map view, saved flats.
+  - **Listing:** gallery lightbox, terms, enquiry form that creates a lead, WhatsApp link pre-filled in the visitor's language, with click tracking.
+  - **Landlords:** 3-step form with photo upload.
+  - **Tools:** moving-in cost and affordability calculators.
+  - **About:** agent profile.
+- **Compliance:** EAA licence numbers in the footer and on listings. A PICS checkbox is required on every form (PDPO), with a separate marketing opt-in.
+- **Admin** (Filament 5, UI in 繁 / 简 / EN):
+  - **Dashboard:** stats and a "needs attention" list.
+  - **Listings:** language tabs; 繁 → 简 auto-converts with OpenCC; photos; publishing is blocked without an owner consent date.
+  - **Leads:** status pipeline, notes, follow-up dates, matching listings, PDPO export and anonymise.
+  - **Landlord submissions:** one click converts a submission into a draft listing.
+  - **Reference data:** districts, estates, MTR lines and stations.
+  - **Translation centre:** missing-translation report and a live editor for UI strings.
+  - **Settings:** agency details, stamp duty rates and default lease terms.
+  - **Users and agents:** roles admin / agent / assistant, ready for multi-agent use (Phase 4).
+- **Stack:** Laravel 13.39, Filament 5.11, Livewire 4.4, spatie/laravel-translatable 6.14, overtrue/php-opencc 1.3, Pest 4.7.
 
-```bash
-age -d -i /path/to/housing-agent-private-key.txt encrypted/site.tar.gz.age | tar -xz -C site
-```
+## Keep the private key safe
 
-### Edit and re-encrypt
-
-1. Decrypt into `src/` with `scripts/decrypt.sh key.txt src`.
-2. Edit the files in `src/`.
-3. Re-encrypt with `scripts/encrypt.sh`, then commit `encrypted/`.
-
-`src/` and `site/` are in `.gitignore`, so plaintext never gets committed.
-
-To let another person decrypt, add their age public key as a new line in `keys/recipient.txt` and re-encrypt.
-
-### Important
-
-- **Keep the private key safe and backed up.** If it's lost, the encrypted site can't be recovered.
-- Never commit the private key. The `.gitignore` blocks `*private-key*` and `age-key*.txt`.
-- GitHub Pages can't serve the encrypted files. Run the demo locally, or decrypt it and deploy the `site/` folder to a private host.
-
-## Project structure (after decrypting)
-
-```
-index.html  rentals.html  listing.html  landlords.html  tools.html  about.html
-admin/      index.html  listings.html  listing-edit.html  leads.html  lead.html  translations.html
-assets/css/site.css            design tokens and components ("Harbour Neon")
-assets/js/data.js              sample listings, districts, MTR stations, leads
-assets/js/i18n*.js             繁 / 简 / EN strings
-assets/js/illustrations.js     drawn stand-ins for photos, skyline, maps
-assets/js/app.js               header/footer, storage, shared helpers
-assets/js/admin.js             admin chrome
-assets/js/pages/*.js           page scripts
-```
-
-Before going live, replace the placeholders in `assets/js/data.js` (`config`): agency name, EAA licence numbers, office address and WhatsApp number.
+If the private key is lost, the code can't be recovered. Never commit it; the hook and `.gitignore` both block files named `*private-key*`.
