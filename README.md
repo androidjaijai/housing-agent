@@ -52,6 +52,20 @@ For long sessions, `scripts/autosave.sh [seconds] [times]` encrypts, commits and
 
 **To give a colleague access:** add their age public key (`age1…`) as a new line in `keys/recipient.txt`, then commit; the hook re-encrypts. Run `FORCE=1 scripts/encrypt-app.sh` to re-encrypt without code changes.
 
+## Versions and branches
+
+Each finished phase is published as a frozen branch `claude/release/vX.Y.Z` (the cloud session can't push git tags).
+To create real tags from them, run `scripts/make-tags.sh` on your machine.
+
+| Version | Contents |
+|---|---|
+| v0.1.0 | Laravel app: MVP core |
+| v0.2.0 | Phase 1: remaining MVP features |
+| v0.3.0 | Phase 2: Growth features |
+| v0.4.0 | Phase 3: multi-agent |
+| v0.5.0 | Phase 4: "later" features |
+| v0.6.0 | Phase 5: operations (deployment config and docs) |
+
 ## 3. The static HTML demo
 
 ```bash

@@ -21,3 +21,17 @@ Wall clock 18:16:50 → 19:06:08. Parallel agents: 32m sequential work finished 
 Sub-agents (Sonnet), exact: 626,737 tokens (A 298,294 + B 225,286 + C 103,157).
 Main session (Opus): the session usage counter is cumulative since 2026-10-24 and was not read at the start of this task,
 so this task's share cannot be separated exactly; see the chat report for the totals at the end of the task.
+
+---
+
+# Phases after v0.1.0
+
+Tags cannot be pushed from the cloud session (the git proxy answers HTTP 403 for any tag ref), so each version is published
+as a frozen release branch `claude/release/vX.Y.Z`. Run `scripts/make-tags.sh` on your own machine to turn them into real tags.
+
+Main-session usage baseline (cumulative counter) at 2026-11-02 22:38 HKT: output 876,249 · cache read 103,742,998 ·
+cache write 2,925,496 · input 5,811 · cost US$47.96.
+
+| Phase | Step | Start | End | Duration | Who | Tokens |
+|---|---|---|---|---|---|---|
+| 1 | Tag v0.1.0 (release branch), branch, packages (scout, intervention/image), migration, models, contract | 22:46:10 | 22:50:04 | 3m54s | Opus | (phase delta below) |
