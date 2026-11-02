@@ -56,3 +56,8 @@ cost +US$12.90. Known gap: listing import accepts CSV only (Filament 5 ImportAct
 | 3 | Agent C (Sonnet): LeadRouter (3 modes), Reassign actions, AgentScope, Commissions auto-create on Leased, Reports per agent, agent slugs, WhatsApp per agent, factories, 16 tests | 23:41 | ~23:45 | 4m05s | Sonnet | 114,022 |
 | 3 | Agent A (Sonnet): agent directory + agent pages (JSON-LD, slugs, sitemap), listing shows own agent + agent WhatsApp, About team view, 12 tests | 23:41 | ~23:47 | 5m50s | Sonnet | 140,321 |
 | 3 | Agent B (Sonnet): 8 policies + role matrix, full agent accounts, reassign/bulk assign, routing + commission settings, per-agent dashboard, reports filter + leaderboard, commissions resource, 18 tests | 23:41 | ~23:54 | 12m48s | Sonnet | 215,993 |
+| 3 | Integration: 300/300 tests, role matrix verified in the browser for admin/agent/assistant (11 admin pages each), public agent pages at 390px | 23:54 | 23:56:31 | ~ | Opus | |
+
+**Phase 3 total:** 23:39:10 → 23:56:31. Sub-agents (Sonnet) exact: 470,336 (C 114,022 + A 140,321 + B 215,993).
+Session usage counter delta (end of phase 2 → end of phase 3): output +141,028 · cache read +34.09M · cache write +0.50M ·
+cost +US$8.39. Known gap: on /about with several agents, two sections still use first-person copy.
