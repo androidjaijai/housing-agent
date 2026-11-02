@@ -55,3 +55,4 @@ cost +US$12.90. Known gap: listing import accepts CSV only (Filament 5 ImportAct
 | 3 | Branch, migration (agent profiles, routing pointer, commissions), Agent/Commission models, second demo agent + assistant, contract | 23:39:10 | 23:40:33 | | Opus | |
 | 3 | Agent C (Sonnet): LeadRouter (3 modes), Reassign actions, AgentScope, Commissions auto-create on Leased, Reports per agent, agent slugs, WhatsApp per agent, factories, 16 tests | 23:41 | ~23:45 | 4m05s | Sonnet | 114,022 |
 | 3 | Agent A (Sonnet): agent directory + agent pages (JSON-LD, slugs, sitemap), listing shows own agent + agent WhatsApp, About team view, 12 tests | 23:41 | ~23:47 | 5m50s | Sonnet | 140,321 |
+| 3 | Agent B (Sonnet): 8 policies + role matrix, full agent accounts, reassign/bulk assign, routing + commission settings, per-agent dashboard, reports filter + leaderboard, commissions resource, 18 tests | 23:41 | ~23:54 | 12m48s | Sonnet | 215,993 |
