@@ -65,3 +65,8 @@ cost +US$8.39. Known gap: on /about with several agents, two sections still use 
 | 4 | Agent C (Sonnet): saved-search alerts (double opt-in, hourly digest), landlord report + signed URL + monthly mail, mortgage + AVD stamp duty calculators, redirect manager + middleware + slug-change redirects, locale:add command, tests | 23:59 | ~00:06 | 6m41s | Sonnet | 141,193 |
 | 4 | Agent B (Sonnet): redirects + saved-search admin (policies), landlord report actions, LTV/AVD band editors + reset, alert frequency, languages page, 13 tests | 23:59 | ~00:10 | 10m33s | Sonnet | 164,213 |
 | 4 | Agent A (Sonnet): compare (3 flats), alert sign-up + confirm/unsubscribe pages, A4 print sheet, signed landlord report page, mortgage + stamp duty tools, About plural copy, 13 tests | 23:59 | ~00:10 | 11m06s | Sonnet | 224,401 |
+| 4 | Integration: 374/374 tests (one unique-constraint failure seen once, not reproducible in 2 reruns — likely random factory data), browser pass (7 pages × 2 widths + 4 admin pages), GitHub 500 on one push → retried | 00:10 | 00:17:15 | ~ | Opus | |
+
+**Phase 4 total:** 23:57:50 → 00:17:15. Sub-agents (Sonnet) exact: 529,807 (C 141,193 + B 164,213 + A 224,401).
+Session usage counter delta (end of phase 3 → end of phase 4): output +171,621 · cache read +32.68M · cache write +0.56M ·
+cost +US$8.51. Notes: AVD/LTV defaults must be verified with IRD/HKMA before launch; alert confirm/unsubscribe act on GET.
