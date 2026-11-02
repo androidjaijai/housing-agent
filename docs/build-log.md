@@ -91,3 +91,20 @@ Session usage counter delta (end of phase 4 → end of phase 5): output +43,019 
 
 Session counter (22:38 baseline → end): output +823,507 · cache read +174.85M · cache write +3.10M. The counter is the whole
 session (it may include sub-agent traffic), so treat the cost column as an upper bound for this work.
+
+---
+
+# v0.7.0 polish (2026-11-03 04:07 → 04:2x HKT)
+
+| Step | Work | Start | End | Duration | Model | Sonnet tokens |
+|---|---|---|---|---|---|---|
+| 6 | Plan + branch `claude/phase6-polish` from v0.6.0, survey of import/alert code | 04:07 | 04:12 | 5m | Opus | |
+| 6 | Agent A (Sonnet): XLSX import (OpenSpout → Filament CSV path), 1000-row cap, Excel template download, 12 tests | 04:12 | ~04:17 | 4m22s | Sonnet | 96,588 |
+| 6 | Agent B (Sonnet): alert confirm/unsubscribe GET shows page, POST acts; RFC 8058 one-click endpoint + List-Unsubscribe headers; tests | 04:12 | ~04:14 | 1m38s | Sonnet | 69,041 |
+| 6 | Agent C (Sonnet): zh_HK / zh_CN wording review (~232 strings), glossary doc | 04:12 | ~04:18 | 5m31s | Sonnet | 160,817 |
+| 6 | Integration: aligned new zh_CN strings with glossary, import button label → CSV／Excel, 404/404 tests, browser pass (alert page 3 locales × 2 widths, POST confirm, admin template download), decrypt → clean folder → identical source, 404/404 | 04:18 | 04:24 | 6m | Opus | |
+
+**v0.7.0 total:** Sub-agents (Sonnet) exact: 326,446 (A 96,588 + B 69,041 + C 160,817).
+Session usage counter delta (04:07 baseline → release): output +73,723 · cache read +6.98M · cache write +1.23M · cost +US$9.92.
+Known limits: an XLSX date typed as a bare number (no date format) is not converted; zh wording still needs a native-speaker
+and legal check (open questions listed in `app-src/docs/glossary-zh.md`); zh_CN nav keeps 租盘 because a test asserts it.
