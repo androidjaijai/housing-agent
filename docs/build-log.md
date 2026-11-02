@@ -61,3 +61,4 @@ cost +US$12.90. Known gap: listing import accepts CSV only (Filament 5 ImportAct
 **Phase 3 total:** 23:39:10 → 23:56:31. Sub-agents (Sonnet) exact: 470,336 (C 114,022 + A 140,321 + B 215,993).
 Session usage counter delta (end of phase 2 → end of phase 3): output +141,028 · cache read +34.09M · cache write +0.50M ·
 cost +US$8.39. Known gap: on /about with several agents, two sections still use first-person copy.
+| 4 | Branch, migration (saved searches, redirects, landlord report fields), SavedSearch/Redirect models, contract | 23:57 | 23:57:52 | | Opus | |
