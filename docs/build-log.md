@@ -36,3 +36,4 @@ cache write 2,925,496 · input 5,811 · cost US$47.96.
 |---|---|---|---|---|---|---|
 | 1 | Tag v0.1.0 (release branch), branch, packages (scout, intervention/image), migration, models, contract | 22:46:10 | 22:50:04 | 3m54s | Opus | (phase delta below) |
 | 1 | Agent C (Sonnet): Money/萬 format, ImageProcessor WebP+watermark, SeoData JSON-LD, Spam honeypot+Turnstile, Scout, schedule commands, enquiry confirmation mail, 30 tests | 22:50 | ~22:56 | 5m40s | Sonnet | 119,222 |
+| 1 | Agent A (Sonnet): sale mode, estate filter, video embed, money format, featured + testimonials, srcset, sitemap/robots/JSON-LD, cookie consent + GA4, spam, legal pages, 23 new tests | 22:50 | ~23:01 | 10m39s | Sonnet | 217,128 |
