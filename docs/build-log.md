@@ -44,3 +44,4 @@ cache write 2,925,496 · input 5,811 · cost US$47.96.
 Session usage counter delta (22:38 → end of phase 1; the counter may also include sub-agent traffic): output +235,063 ·
 cache read +40.36M · cache write +1.21M · cost +US$14.94.
 | 2 | Branch, packages (activitylog 4.12, anthropic-ai/sdk 1.3), Claude API guidance, migration, models (Post, Viewing, ListingPriceChange, GlossaryTerm, price history, leased_at, activity log), contract | 23:15:25 | 23:18:12 | | Opus | |
+| 2 | Agent C (Sonnet): Slugger+observers, ClaudeTranslator (SDK, effort low, json schema, fallbacks default), glossary-aware OpenCC, PublishRules, ViewingScheduler, LeadDuplicates, Reports, SocialPost, CSV row importer, 5 scheduled commands + notifications, 40 tests | 23:20 | ~23:29 | 8m44s | Sonnet | (see notification) |
