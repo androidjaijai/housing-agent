@@ -10,3 +10,4 @@ main session = difference in the per-turn "tokens left" counter (new content per
 | 2 | Encryption hook (encrypt-app / decrypt-app / pre-commit) | 18:36:30 | 18:38:30 | ~2m | Opus | ~8k | |
 | 3 | Foundation: Laravel Boost, migrations, enums, models, OpenCC service, locale routing, lang files, seeder, factories, tests, agent contract | 18:38:30 | 18:42:53 | see end-start | Opus | (counted at end of turn) | 5/5 tests pass |
 | 4c | Agent C (Sonnet): services, actions, observer, factories, 37 tests | ~18:43 | ~18:46 | 2m52s | Sonnet | 103,157 | all signatures match contract |
+| 4a | Agent A (Sonnet): public site (6 pages, Livewire rentals, layout, illustrations, 12 tests) | ~18:43 | ~18:56 | 13m23s | Sonnet | 298,294 | |
