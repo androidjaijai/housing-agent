@@ -64,3 +64,4 @@ cost +US$8.39. Known gap: on /about with several agents, two sections still use 
 | 4 | Branch, migration (saved searches, redirects, landlord report fields), SavedSearch/Redirect models, contract | 23:57 | 23:57:52 | | Opus | |
 | 4 | Agent C (Sonnet): saved-search alerts (double opt-in, hourly digest), landlord report + signed URL + monthly mail, mortgage + AVD stamp duty calculators, redirect manager + middleware + slug-change redirects, locale:add command, tests | 23:59 | ~00:06 | 6m41s | Sonnet | 141,193 |
 | 4 | Agent B (Sonnet): redirects + saved-search admin (policies), landlord report actions, LTV/AVD band editors + reset, alert frequency, languages page, 13 tests | 23:59 | ~00:10 | 10m33s | Sonnet | 164,213 |
+| 4 | Agent A (Sonnet): compare (3 flats), alert sign-up + confirm/unsubscribe pages, A4 print sheet, signed landlord report page, mortgage + stamp duty tools, About plural copy, 13 tests | 23:59 | ~00:10 | 11m06s | Sonnet | 224,401 |
