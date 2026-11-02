@@ -54,3 +54,4 @@ Session usage counter delta (end of phase 1 → end of phase 2): output +232,776
 cost +US$12.90. Known gap: listing import accepts CSV only (Filament 5 ImportAction has no XLSX reader); exports offer CSV + XLSX.
 | 3 | Branch, migration (agent profiles, routing pointer, commissions), Agent/Commission models, second demo agent + assistant, contract | 23:39:10 | 23:40:33 | | Opus | |
 | 3 | Agent C (Sonnet): LeadRouter (3 modes), Reassign actions, AgentScope, Commissions auto-create on Leased, Reports per agent, agent slugs, WhatsApp per agent, factories, 16 tests | 23:41 | ~23:45 | 4m05s | Sonnet | 114,022 |
+| 3 | Agent A (Sonnet): agent directory + agent pages (JSON-LD, slugs, sitemap), listing shows own agent + agent WhatsApp, About team view, 12 tests | 23:41 | ~23:53 | (pending) | Sonnet | (pending) |
