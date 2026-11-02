@@ -70,3 +70,4 @@ cost +US$8.39. Known gap: on /about with several agents, two sections still use 
 **Phase 4 total:** 23:57:50 → 00:17:15. Sub-agents (Sonnet) exact: 529,807 (C 141,193 + B 164,213 + A 224,401).
 Session usage counter delta (end of phase 3 → end of phase 4): output +171,621 · cache read +32.68M · cache write +0.56M ·
 cost +US$8.51. Notes: AVD/LTV defaults must be verified with IRD/HKMA before launch; alert confirm/unsubscribe act on GET.
+| 5 | Agent (Sonnet): security headers + CSP, HTTPS/proxies, /health + heartbeat, backups (schedule, disk), cache headers, deploy kit (nginx, supervisor, cron, deploy.sh, .env.production.example), OPERATIONS.md, 11 tests | 00:18 | ~00:25 | 6m06s | Sonnet | 116,248 |
