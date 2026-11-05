@@ -27,7 +27,7 @@ php artisan serve                   # http://127.0.0.1:8000
 
 - **Public site:** http://127.0.0.1:8000. It redirects to `/zh-hk`, `/zh-cn` or `/en` based on your browser's language.
 - **Admin panel:** http://127.0.0.1:8000/admin. Demo login `admin@example.com` / `password`. **Change it before going live.**
-- **Tests:** `php artisan test` (404 Pest tests).
+- **Tests:** `php artisan test` (550 Pest tests, 146 of them security tests).
 - **MySQL:** set the `DB_*` values in `.env`, then run `php artisan migrate --seed`.
 - **Placeholders to replace:** agency name, licence numbers, office address and WhatsApp number. Edit them in the admin under **Settings**, or in `database/seeders/data/demo.json` before seeding.
 
@@ -66,6 +66,7 @@ To create real tags from them, run `scripts/make-tags.sh` on your machine.
 | v0.5.0 | Phase 4: "later" features |
 | v0.6.0 | Phase 5: operations (deployment config and docs) |
 | v0.7.0 | Polish: XLSX listing import + Excel template, prefetch-safe alert links with one-click unsubscribe (RFC 8058), 繁/简 wording review (`app-src/docs/glossary-zh.md`) |
+| v0.8.0 | Security: Symfony upgrade (composer audit clean), trusted hosts, HTML sanitizer, 13 fixes, 146 security tests, report in `app-src/docs/SECURITY-TESTS.md` |
 
 ## 3. The static HTML demo
 

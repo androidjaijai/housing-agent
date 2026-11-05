@@ -108,3 +108,19 @@ session (it may include sub-agent traffic), so treat the cost column as an upper
 Session usage counter delta (04:07 baseline → release): output +73,723 · cache read +6.98M · cache write +1.23M · cost +US$9.92.
 Known limits: an XLSX date typed as a bare number (no date format) is not converted; zh wording still needs a native-speaker
 and legal check (open questions listed in `app-src/docs/glossary-zh.md`); zh_CN nav keeps 租盘 because a test asserts it.
+
+---
+
+# v0.8.0 security (2026-11-05 11:37 → 12:12 HKT)
+
+| Step | Work | Start | End | Model | Sonnet tokens |
+|---|---|---|---|---|---|
+| 7 | Read-only review + plan (composer audit, host trust, sanitizer, translation centre) | 11:25 | 11:35 | Opus | |
+| 7 | Branch `claude/phase7-security`, Symfony 7.4.22 → 7.4.23 (audit clean), 404/404 | 11:37 | 11:40 | Opus | |
+| 7 | Agent A (Sonnet): trusted hosts middleware, HtmlSanitizer, admin-only translations + safeInline, raw-output audit, 16 tests | 11:41 | ~11:45 | Sonnet | 88,867 |
+| 7 | Agent B (Sonnet): access matrix (16 resources × 4 roles), IDOR, sensitive data, 3 holes fixed, 58 tests | 11:41 | ~11:54 | Sonnet | 184,148 |
+| 7 | Agent C (Sonnet): public surface (XSS, SQLi, CSRF, rate limits, uploads, signed URLs, headers), 3 holes fixed, 71 tests | 11:41 | ~11:55 | Sonnet | 156,635 |
+| 7 | Integration: deactivated-agent login fix, per-route throttle counters, X-Powered-By removal, /health host exemption, live scan (production mode), report, 550/550, decrypt → clean folder → 550/550 | 11:55 | 12:12 | Opus | |
+
+**v0.8.0 total:** Sonnet exact 429,650. Session counter delta (11:37 baseline → 12:06): output +117,647 · cost +US$5.12
+(counter may lag; final figure in the next entry).
