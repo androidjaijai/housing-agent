@@ -123,4 +123,4 @@ and legal check (open questions listed in `app-src/docs/glossary-zh.md`); zh_CN 
 | 7 | Integration: deactivated-agent login fix, per-route throttle counters, X-Powered-By removal, /health host exemption, live scan (production mode), report, 550/550, decrypt → clean folder → 550/550 | 11:55 | 12:12 | Opus | |
 
 **v0.8.0 total:** Sonnet exact 429,650. Session counter delta (11:37 baseline → 12:06): output +117,647 · cost +US$5.12
-(counter may lag; final figure in the next entry).
+(counter lagged). Final incl. report: output +134,748 · cost +US$6.53 (11:37 → 12:24).
