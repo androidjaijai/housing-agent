@@ -1,0 +1,9 @@
+# Housing agent on Opalstack. Install with: deploy/opalstack/opalstack-deploy.sh cron --install
+# OPAL_PHP and OPAL_APP_DIR are replaced by the values from opalstack.env.
+#
+# Opalstack has no supervisor / systemd, so there is no long-running queue worker.
+# Instead a short-lived worker is started every minute: it drains the queue, then exits
+# (--stop-when-empty) or after 55 s (--max-time) so runs never overlap for long.
+# The scheduler also runs every minute and dispatches everything in routes/console.php (heartbeat, backups, ...).
+* * * * * cd OPAL_APP_DIR/current && OPAL_PHP artisan schedule:run >> /dev/null 2>&1
+* * * * * cd OPAL_APP_DIR/current && OPAL_PHP artisan queue:work --stop-when-empty --max-time=55 --tries=3 >> OPAL_APP_DIR/shared/storage/logs/queue.log 2>&1
