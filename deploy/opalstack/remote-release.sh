@@ -56,7 +56,8 @@ prune() {
 }
 
 cmd_activate() {
-  local ts="${1:-}" rel previous switched=0
+  local previous
+  ts="${1:-}"; switched=0  # globals: the EXIT trap reads them
   [[ "$ts" =~ ^[0-9]{14}$ ]] || die "usage: remote-release.sh activate <YYYYmmddHHMMSS>"
   rel="$REL/$ts"
   [ -d "$rel" ] || die "release directory $rel does not exist"
@@ -79,7 +80,8 @@ cmd_activate() {
   COMPOSER_MEMORY_LIMIT=-1 "$COMPOSER" install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
   log "storage:link"
-  "$PHP" artisan storage:link --relative --force
+  # --relative needs symfony/filesystem (not always installed with --no-dev); fall back to an absolute link.
+  "$PHP" artisan storage:link --relative --force || { warn "relative storage link unavailable; using an absolute link"; "$PHP" artisan storage:link --force; }
 
   if [ "${SKIP_BACKUP:-0}" = 1 ]; then
     log "Pre-migration backup skipped (SKIP_BACKUP=1)"

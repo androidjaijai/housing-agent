@@ -71,6 +71,7 @@ To create real tags from them, run `scripts/make-tags.sh` on your machine.
 | v0.6.0 | Phase 5: operations (deployment config and docs) |
 | v0.7.0 | Polish: XLSX listing import + Excel template, prefetch-safe alert links with one-click unsubscribe (RFC 8058), 繁/简 wording review (`app-src/docs/glossary-zh.md`) |
 | v0.8.0 | Security: Symfony upgrade (composer audit clean), trusted hosts, HTML sanitizer, 13 fixes, 146 security tests, report in `app-src/docs/SECURITY-TESTS.md` |
+| v0.8.1 | Opalstack deploy kit: `deploy/opalstack/` (guide, local Claude manual, deploy/rollback scripts) + `/deploy-opalstack` command |
 
 ## 3. The static HTML demo
 

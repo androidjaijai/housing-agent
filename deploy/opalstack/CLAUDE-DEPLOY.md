@@ -25,7 +25,7 @@ Deploy the encrypted Laravel 13 app (this repo, `encrypted/laravel.tar.gz.age`) 
 
 Details below were NOT verified when this manual was written. Check them on https://docs.opalstack.com (PHP and Symlink app guides: https://docs.opalstack.com/topic-guides/symlinks/), in the dashboard https://my.opalstack.com (ask the user to read values), and on the server:
 
-- `ssh $OPAL_SSH 'ls /usr/bin/php*; php -v; php -m'` (CLI PHP). Need >= 8.3 and extensions: pdo_mysql, mbstring, intl, gd, zip, curl, xml, bcmath, fileinfo, openssl.
+- `ssh $OPAL_SSH 'ls /usr/bin/php*; php -v; php -m'` (CLI PHP). Need >= 8.3 and extensions: pdo_mysql, mbstring, intl, gd (with WebP), zip, sodium, curl, dom, fileinfo, openssl (bcmath recommended, not required).
 - Which PHP the web app uses (set in the dashboard app) must also be >= 8.3 and match the CLI one.
 - Path of a PHP 8.3 CLI binary (`OPAL_PHP`) and of Composer (`command -v composer`, else a `composer.phar` path; `OPAL_COMPOSER`).
 - Database host and port (MariaDB), SMTP host/port/encryption for the mailbox.

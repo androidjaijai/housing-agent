@@ -1,5 +1,5 @@
 # Housing agent on Opalstack. Install with: deploy/opalstack/opalstack-deploy.sh cron --install
-# OPAL_PHP and OPAL_APP_DIR are replaced by the values from opalstack.env.
+# The two upper-case placeholders below (PHP binary, app dir) are filled in from opalstack.env.
 #
 # Opalstack has no supervisor / systemd, so there is no long-running queue worker.
 # Instead a short-lived worker is started every minute: it drains the queue, then exits

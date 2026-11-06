@@ -124,3 +124,19 @@ and legal check (open questions listed in `app-src/docs/glossary-zh.md`); zh_CN 
 
 **v0.8.0 total:** Sonnet exact 429,650. Session counter delta (11:37 baseline → 12:06): output +117,647 · cost +US$5.12
 (counter lagged). Final incl. report: output +134,748 · cost +US$6.53 (11:37 → 12:24).
+
+---
+
+# v0.8.1 Opalstack deploy kit (2026-11-06 19:28 → 19:45 HKT)
+
+| Step | Work | Model | Sonnet tokens |
+|---|---|---|---|
+| 8 | Plan (Opalstack symlink app, key stays local, MariaDB, cron instead of supervisor) | Opus | |
+| 8 | First two agents started while the session was still in plan mode → read-only, no files; stopped | Sonnet | 145,691 (wasted) |
+| 8 | Agent A2: opalstack-deploy.sh (preflight/first-run/deploy/rollback/status/cron), remote-release.sh, env + cron templates; local-mode simulation (2 deploys, /en 200, rollback) | Sonnet | 113,807 |
+| 8 | Agent B2: deploy/opalstack/README.md (Cantonese), CLAUDE-DEPLOY.md, /deploy-opalstack command, root README section | Sonnet | 85,301 |
+| 8 | Integration: bcmath → warning, WARN lines in preflight, docs aligned, secrets scan, release | Opus | |
+
+Sonnet total 344,799 (199,108 useful). Session counter (19:28 → 19:42): output +68,409 · cost +US$3.15 (counter may lag).
+Not tested here: real SSH/rsync to Opalstack (no rsync in this container; the simulation used a tar shim), Opalstack PHP 8.3
+availability and paths (docs.opalstack.com not reachable from this session — the local Claude verifies them).
