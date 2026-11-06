@@ -52,6 +52,10 @@ For long sessions, `scripts/autosave.sh [seconds] [times]` encrypts, commits and
 
 **To give a colleague access:** add their age public key (`age1…`) as a new line in `keys/recipient.txt`, then commit; the hook re-encrypts. Run `FORCE=1 scripts/encrypt-app.sh` to re-encrypt without code changes.
 
+## Deploy to Opalstack / 部署去 Opalstack
+
+Deploy the encrypted app to Opalstack shared hosting with your local Claude Code (`/deploy-opalstack`). 用本機 Claude Code 將加密 app 部署去 Opalstack 共享主機。Guide / 說明: [deploy/opalstack/README.md](deploy/opalstack/README.md).
+
 ## Versions and branches
 
 Each finished phase is published as a frozen branch `claude/release/vX.Y.Z` (the cloud session can't push git tags).
