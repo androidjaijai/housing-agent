@@ -11,6 +11,7 @@ for _ in $(seq 1 "$runs"); do
   # Encrypt first: app-src/ and src/ are git-ignored, so only the encrypted archives can change.
   [ -d app-src ] && scripts/encrypt-app.sh >/dev/null
   [ -d src ] && scripts/encrypt.sh >/dev/null
+  [ -d notes ] && scripts/encrypt-notes.sh >/dev/null
   git add encrypted docs scripts 2>/dev/null || true
   if ! git diff --cached --quiet; then
     git commit -q -m "WIP autosave $(TZ=Asia/Hong_Kong date '+%Y-%m-%d %H:%M') (encrypted)"

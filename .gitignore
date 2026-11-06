@@ -2,6 +2,7 @@
 /src/
 /app-src/
 /site/
+/notes/
 # Private keys must never be committed.
 *private-key*
 *.key

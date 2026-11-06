@@ -15,11 +15,16 @@ if [ -d src ]; then
   git add encrypted/site.tar.gz.age encrypted/site.tar.gz.age.sha256
 fi
 
+if [ -d notes ]; then
+  scripts/encrypt-notes.sh >/dev/null
+  git add encrypted/notes.tar.gz.age encrypted/notes.tar.gz.age.sha256
+fi
+
 # 2. Block plaintext source and private keys.
 bad=0
 while IFS= read -r f; do
   case "$f" in
-    app-src/*|src/*|site/*) echo "pre-commit: refusing plaintext source file: $f" >&2; bad=1 ;;
+    app-src/*|src/*|site/*|notes/*) echo "pre-commit: refusing plaintext source file: $f" >&2; bad=1 ;;
     *private-key*|*.key) echo "pre-commit: refusing key file: $f" >&2; bad=1 ;;
   esac
   if [ -f "$f" ] && grep -qE "AGE-SECRET-KEY-1[0-9A-Z]{50,}" "$f" 2>/dev/null; then

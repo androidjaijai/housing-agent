@@ -1,11 +1,12 @@
 # Housing Agent: Hong Kong rental agent website (encrypted)
 
-This repository contains two encrypted projects:
+This repository contains these encrypted archives:
 
 | Encrypted file | What it is | Decrypt with |
 |---|---|---|
 | `encrypted/laravel.tar.gz.age` | **The real application:** Laravel 13 + Filament 5 + Livewire 4, 繁 / 简 / EN | `scripts/decrypt-app.sh` |
 | `encrypted/site.tar.gz.age` | The earlier static HTML click-through demo | `scripts/decrypt.sh` |
+| `encrypted/notes.tar.gz.age` | Internal notes: client phase plan, pricing, sales strategy, review drafts, report page sources (`notes/sales/*.md`, `notes/pages/*.html`) | `scripts/decrypt-notes.sh` |
 
 Both are encrypted with [age](https://age-encryption.org) to the public key in `keys/recipient.txt`. Only the matching **private key** can decrypt them, and that key is not in this repository.
 
