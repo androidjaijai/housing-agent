@@ -177,3 +177,11 @@ Sonnet 227,800. Session counter (01:20 → 01:45): output +77,570 · cost +US$5.
 Opus only (no sub-agents): student hero copy in three languages, hreflang/language links without `?type=sale` when sale is
 off, all-time views card hidden when monthly stats show, 5 tests (822/822), university coordinate check list
 (`notes/plans/institution-coordinates.md`). Done after the key rotation: encrypted to the new public key only.
+
+---
+
+# v1.0.3 seed data (2026-11-27)
+Agent (Sonnet, 190,842 tokens): ReferenceDataSeeder (production-safe), DemoScaleSeeder (279 listings, 456 leads, 4 agents,
+36 price changes), DemoStatsSeeder (90 days), InstitutionLinker (haversine walk/transit minutes from approximate station
+coordinates), Region::NewTerritories, demo seeders guarded in production, 7 tests. Opus: New Territories on the rentals
+map and About map, "全港租盤" titles, deploy docs (ReferenceDataSeeder on production). 829/829. migrate:fresh --seed ≈ 7 s.

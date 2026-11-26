@@ -21,14 +21,14 @@ scripts/decrypt-app.sh ~/path/to/housing-agent-private-key.txt   # → app-src/
 cd app-src
 composer install
 cp -n .env.example .env && php artisan key:generate
-touch database/database.sqlite && php artisan migrate --seed
+touch database/database.sqlite && php artisan migrate --seed   # demo data; on a live server use: php artisan db:seed --class=ReferenceDataSeeder --force
 php artisan storage:link
 php artisan serve                   # http://127.0.0.1:8000
 ```
 
 - **Public site:** http://127.0.0.1:8000. It redirects to `/zh-hk`, `/zh-cn` or `/en` based on your browser's language.
 - **Admin panel:** http://127.0.0.1:8000/admin. Demo login `admin@example.com` / `password`. **Change it before going live.**
-- **Tests:** `php artisan test` (822 Pest tests, 316 of them security tests).
+- **Tests:** `php artisan test` (829 Pest tests, 316 of them security tests).
 - **MySQL:** set the `DB_*` values in `.env`, then run `php artisan migrate --seed`.
 - **Placeholders to replace:** agency name, licence numbers, office address and WhatsApp number. Edit them in the admin under **Settings**, or in `database/seeders/data/demo.json` before seeding.
 
@@ -77,6 +77,7 @@ To create real tags from them, run `scripts/make-tags.sh` on your machine.
 | v1.0.0 | Student edition: `APP_EDITION=student-v1` (rentals site, listing management, search). Feature flags in `config/features.php`; room/bed, short lease, bills, 12 universities with travel minutes, daily WhatsApp/WeChat/view stats, real WeChat QR. `scripts/rotate-key.sh` |
 | v1.0.1 | Security update: dependencies patched (composer audit clean), v1.0 security review (7 fixes), OWASP ZAP scan (CSP img-src, nosniff), QR re-encode. Report: `app-src/docs/SECURITY-TESTS.md`; ZAP reports in `notes/security/` |
 | v1.0.2 | Student polish: student hero copy (繁/简/EN), language links drop `?type=sale` when sale is off, all-time views card hidden in student edition. University coordinate check list in `notes/plans/` |
+| v1.0.3 | Seed data: production-safe `ReferenceDataSeeder` (18 districts incl. New Territories, 8 MTR lines / 85 stations, glossary, default settings); large deterministic demo (279 listings, 72 rooms/beds, 456 leads, 90 days of stats, distance-based university links); demo seeders refuse to run in production |
 
 ## 3. The static HTML demo
 
