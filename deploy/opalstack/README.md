@@ -40,7 +40,7 @@ claude
    （填 DB、MAIL、`APP_URL`、`APP_KEY` 等，Claude 會逐項講邊度攞值。Claude 唔會顯示 `.env` 內容。）
 3. `/deploy-opalstack deploy`：先 dry-run，再真正部署（解密、上傳、`composer install`、備份資料庫、`migrate`、切換版本）。
 
-之後 Claude 會帶你開第一個 admin（`make:filament-user`，**唔會**灌 demo 資料）、設定 cron、逐項驗證。你亦可以直接用口語講，例如「幫我部署去 Opalstack」，Claude 會跟同一份手冊。
+之後 Claude 會幫你入地區同港鐵站等參考資料（`ReferenceDataSeeder`），再帶你開第一個 admin（`make:filament-user`，**唔會**灌 demo 資料）、設定 cron、逐項驗證。你亦可以直接用口語講，例如「幫我部署去 Opalstack」，Claude 會跟同一份手冊。
 
 設定檔：`cp deploy/opalstack/opalstack.env.example deploy/opalstack/opalstack.env` 再填（Claude 會幫你；呢個檔唔會入 git）。主要變數：`OPAL_SSH`、`OPAL_APP_DIR`、`OPAL_PHP`、`OPAL_COMPOSER`、`OPAL_URL`、`AGE_KEY_FILE`、`DEPLOY_BRANCH`、`KEEP_RELEASES`。
 

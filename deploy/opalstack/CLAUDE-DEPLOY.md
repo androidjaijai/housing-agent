@@ -97,7 +97,11 @@ The user edits it ON THE SERVER: `ssh -t $OPAL_SSH nano $OPAL_APP_DIR/shared/.en
 
 1. `deploy/opalstack/opalstack-deploy.sh deploy --dry-run` and report the plan.
 2. Ask approval, then `deploy/opalstack/opalstack-deploy.sh deploy`. It decrypts locally, rsyncs a new `releases/<ts>`, links shared `.env` and `storage`, then runs remote-release.sh: `composer install --no-dev`, `storage:link`, `backup:run --only-db` before migrate, `migrate --force`, `optimize`, atomic `current` switch, `queue:restart`, prune old releases.
-3. NO demo seeding in production: never run `migrate --seed` or `db:seed`.
+3. Reference data only, NO demo seeding in production. After the first deploy, ask the user, then run once (safe to repeat):
+   `ssh $OPAL_SSH "cd $OPAL_APP_DIR/current && $OPAL_PHP artisan db:seed --class=ReferenceDataSeeder --force"`
+   It loads the 18 districts, MTR lines and stations, glossary terms and default settings; it creates no users,
+   listings or leads. The 12 universities are loaded by the migration itself. Never run `migrate --seed`, plain
+   `db:seed`, `DemoSeeder`, `DemoScaleSeeder` or `DemoStatsSeeder` on production (they refuse unless forced).
 4. Create the first admin interactively: first confirm the command exists with `ssh $OPAL_SSH "cd $OPAL_APP_DIR/current && $OPAL_PHP artisan list | grep filament-user"`; then ask the user to run (or approve running) `ssh -t $OPAL_SSH "cd $OPAL_APP_DIR/current && $OPAL_PHP artisan make:filament-user"`. The password is typed by the user at the prompt only. Remind them to enable MFA.
 
 ## Step 6: web routing and HTTPS
