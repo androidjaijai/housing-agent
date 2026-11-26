@@ -170,3 +170,10 @@ shows next to the new monthly cards.
 | 4 | QR re-encode, unreadable photo → field error, report, 817/817 | Opus | |
 
 Sonnet 227,800. Session counter (01:20 → 01:45): output +77,570 · cost +US$5.45 (counter may lag).
+
+---
+
+# v1.0.2 student polish (2026-11-27)
+Opus only (no sub-agents): student hero copy in three languages, hreflang/language links without `?type=sale` when sale is
+off, all-time views card hidden when monthly stats show, 5 tests (822/822), university coordinate check list
+(`notes/plans/institution-coordinates.md`). Done after the key rotation: encrypted to the new public key only.
