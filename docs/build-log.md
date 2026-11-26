@@ -157,3 +157,16 @@ Sonnet 392,999. Session counter (00:41 → 01:13): output +132,978 · cost +US$8
 Not done / to check: university coordinates are approximate; demo travel minutes are placeholders; hreflang
 alternates on /rent?type=sale keep ?type=sale when sale is off; the old cumulative "listing views" stat card still
 shows next to the new monthly cards.
+
+---
+
+# v1.0.1 security update (2026-11-27 01:20 → 01:47 HKT)
+
+| Step | Work | Model | Sonnet tokens |
+|---|---|---|---|
+| 1 | composer update laravel/framework, symfony/*, league/csv → audit 0; 643/643 | Opus | |
+| 2 | Agent (Sonnet): attack review of v1.0 additions, 7 fixes, 170 tests | Sonnet | 227,800 |
+| 3 | OWASP ZAP 2.16.1 quick scan (local, production mode, unauthenticated) ×2; CSP img-src tightened, nosniff in nginx static locations, regression tests | Opus | |
+| 4 | QR re-encode, unreadable photo → field error, report, 817/817 | Opus | |
+
+Sonnet 227,800. Session counter (01:20 → 01:45): output +77,570 · cost +US$5.45 (counter may lag).
