@@ -15,7 +15,9 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 old="${1:-}"; new="${2:-}"
-[ -f "$old" ] && [ -f "$new" ] || { echo "Usage: scripts/rotate-key.sh OLD_PRIVATE_KEY NEW_PRIVATE_KEY [--no-push] [branch ...]" >&2; exit 1; }
+[ -n "$old" ] && [ -n "$new" ] || { echo "Usage: scripts/rotate-key.sh OLD_PRIVATE_KEY NEW_PRIVATE_KEY [--no-push] [branch ...]" >&2; exit 1; }
+[ -f "$old" ] || { echo "OLD private key not found: $old" >&2; exit 1; }
+[ -f "$new" ] || { echo "NEW private key not found: $new" >&2; exit 1; }
 shift 2
 push=1
 branches=()
