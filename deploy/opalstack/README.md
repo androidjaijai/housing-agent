@@ -8,7 +8,7 @@
 
 1. Opalstack 帳戶（https://my.opalstack.com），同埋一個你控制嘅域名（可以改 DNS）。
 2. 本機裝好：`claude`（Claude Code）、`age`、`git`、`ssh`、`rsync`、PHP 8.3+ 同 Composer（用嚟本機整 `APP_KEY`）。
-3. age 私鑰檔案，放喺 repo **外面**，例如 `~/keys/housing-agent-private-key.txt`，然後 `chmod 600` 佢。
+3. age 私鑰檔案，放喺 repo 嘅 `keys/` 資料夾（例如 `keys/housing-agent-key.txt`，git 會自動忽略，唔會被 commit），或者 repo 外面；然後 `chmod 600` 佢。另外喺密碼管理器或者離線 USB 備份一份。
 4. 一條 SSH key（`ssh-keygen -t ed25519`），公鑰要加落 Opalstack（見下面第 1 步）。
 
 ## 喺 Opalstack 控制台要開嘅嘢

@@ -44,7 +44,7 @@ Record verified values in `deploy/opalstack/opalstack.env` (git-ignored) in Step
 | `OPAL_PHP` | server PHP 8.3 CLI path |
 | `OPAL_COMPOSER` | server composer command |
 | `OPAL_URL` | `https://domain`, no trailing slash |
-| `AGE_KEY_FILE` | private key path, outside the repo, `chmod 600` (check with `stat -c %a`) |
+| `AGE_KEY_FILE` | private key path: in the git-ignored `keys/` folder (e.g. `keys/housing-agent-key.txt`) or outside the repo; `chmod 600` (check with `stat -c %a`). Never anywhere git would commit it |
 | `DEPLOY_BRANCH` | default `claude/interactive-demo` |
 | `KEEP_RELEASES` | default 5 |
 | `OPAL_SSH_OPTS` | optional extra ssh options |

@@ -107,4 +107,4 @@ python3 -m http.server 8000 -d site
 
 ## Keep the private key safe
 
-If the private key is lost, the code can't be recovered. Never commit it; the hook and `.gitignore` both block files named `*private-key*`.
+If the private key is lost, the code can't be recovered. Keep it in `keys/` (git-ignored except the public `recipient.txt`) or outside the repo, back it up offline, and never commit it; `.gitignore` and the pre-commit hook both block private keys. To switch to a new key, use `scripts/rotate-key.sh`.
