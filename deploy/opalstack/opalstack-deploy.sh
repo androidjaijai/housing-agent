@@ -71,9 +71,15 @@ sha256_of() {
 }
 abs_dir() { (cd "$1" 2>/dev/null && pwd -P); }
 
+# True when the key sits inside the repository where git could commit it. A key in a git-ignored, untracked
+# place inside the repo (keys/<name>.txt; only keys/recipient.txt is tracked) is accepted.
 key_inside_repo() {
   local d; d="$(abs_dir "$(dirname "$AGE_KEY_FILE")")" || return 1
-  case "$d/" in "$REPO_ROOT"/*) return 0 ;; *) return 1 ;; esac
+  case "$d/" in "$REPO_ROOT"/*) ;; *) return 1 ;; esac
+  local rel="${d#"$REPO_ROOT"}"; rel="${rel#/}"; rel="${rel:+$rel/}$(basename "$AGE_KEY_FILE")"
+  git -C "$REPO_ROOT" ls-files --error-unmatch "$rel" >/dev/null 2>&1 && return 0
+  git -C "$REPO_ROOT" check-ignore -q "$rel" && return 1
+  return 0
 }
 
 # ---------------------------------------------------------------- preflight
@@ -97,8 +103,8 @@ cmd_preflight() {
     pf PASS "local: key file exists"
     if [ "$(file_mode "$AGE_KEY_FILE")" = 600 ]; then pf PASS "local: key chmod 600"
     else pf FAIL "local: key chmod 600" "run: chmod 600 <key file>"; fi
-    if key_inside_repo; then pf FAIL "local: key outside repo" "move the key out of $REPO_ROOT"
-    else pf PASS "local: key outside repo"; fi
+    if key_inside_repo; then pf FAIL "local: key not committable" "put it in keys/ (git-ignored) or outside $REPO_ROOT"
+    else pf PASS "local: key not committable"; fi
   else
     pf FAIL "local: key file exists" "AGE_KEY_FILE not found"
   fi
@@ -229,7 +235,7 @@ cmd_deploy() {
   require_config
   command -v rsync >/dev/null 2>&1 || die "rsync is not installed"
   [ -f "$AGE_KEY_FILE" ] || die "AGE_KEY_FILE not found: $AGE_KEY_FILE"
-  if key_inside_repo; then die "AGE_KEY_FILE must not be inside the repository"; fi
+  if key_inside_repo; then die "AGE_KEY_FILE is inside the repository and not git-ignored (use keys/<name>.txt or a path outside the repo)"; fi
   git_update
 
   WORK="$(mktemp -d "${TMPDIR:-/tmp}/opalstack-deploy.XXXXXX")"

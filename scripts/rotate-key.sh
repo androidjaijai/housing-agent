@@ -10,7 +10,8 @@
 #
 # Generate the new key on your own machine first:
 #   age-keygen -o ~/keys/housing-agent-key-NEW.txt && chmod 600 ~/keys/housing-agent-key-NEW.txt
-# Never put either private key inside the repository.
+# Keys may live in the repo's keys/ folder (git-ignored except recipient.txt) or anywhere outside the repo.
+# A key inside the repo that git would track is refused.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
@@ -28,8 +29,17 @@ done
 
 command -v age >/dev/null && command -v age-keygen >/dev/null || { echo "age / age-keygen not installed." >&2; exit 1; }
 root="$(pwd)"
-case "$(cd "$(dirname "$old")" && pwd)/" in "$root"/*) echo "The OLD key file is inside the repository. Move it out first." >&2; exit 1 ;; esac
-case "$(cd "$(dirname "$new")" && pwd)/" in "$root"/*) echo "The NEW key file is inside the repository. Move it out first." >&2; exit 1 ;; esac
+# A key inside the repository is allowed only when git ignores it and it is not tracked (e.g. keys/<name>.txt).
+key_unsafe_in_repo() {
+  local abs; abs="$(cd "$(dirname "$1")" && pwd)/$(basename "$1")"
+  case "$abs" in "$root"/*) ;; *) return 1 ;; esac
+  local rel="${abs#"$root"/}"
+  git ls-files --error-unmatch "$rel" >/dev/null 2>&1 && return 0
+  git check-ignore -q "$rel" && return 1
+  return 0
+}
+key_unsafe_in_repo "$old" && { echo "The OLD key is inside the repository and not git-ignored. Put it in keys/ or outside the repo." >&2; exit 1; }
+key_unsafe_in_repo "$new" && { echo "The NEW key is inside the repository and not git-ignored. Put it in keys/ or outside the repo." >&2; exit 1; }
 newpub="$(age-keygen -y "$new")"
 oldpub="$(age-keygen -y "$old")"
 [ "$newpub" != "$oldpub" ] || { echo "OLD and NEW are the same key." >&2; exit 1; }
