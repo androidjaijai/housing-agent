@@ -140,3 +140,20 @@ and legal check (open questions listed in `app-src/docs/glossary-zh.md`); zh_CN 
 Sonnet total 344,799 (199,108 useful). Session counter (19:28 → 19:42): output +68,409 · cost +US$3.15 (counter may lag).
 Not tested here: real SSH/rsync to Opalstack (no rsync in this container; the simulation used a tar shim), Opalstack PHP 8.3
 availability and paths (docs.opalstack.com not reachable from this session — the local Claude verifies them).
+
+---
+
+# v1.0.0 student edition (2026-11-27 00:41 → 01:15 HKT)
+
+| Step | Work | Model | Sonnet tokens |
+|---|---|---|---|
+| 1 | Container reset: re-decrypt with the user's key, composer install (~6 min via proxy), migrate | Opus | |
+| 2 | Foundation: feature flags + editions, `feature` middleware, `@feature`, Filament trait, migration (student fields, institutions, pivot, daily stats), 12 HK universities, ListingStats, commands, contract, 9 tests; fixed SQLite date bug in stats | Opus | |
+| 3 | Agent A (Sonnet): admin gating, student form + institutions repeater, table columns/filters, 3 dashboard widgets, settings (WeChat, agent profile), importer columns, schedule gating, 38 tests | Sonnet | 191,693 |
+| 4 | Agent B (Sonnet): route gating, nav, home institution search, filters + nearest sort, cards, listing page, real WeChat modal + beacon, `/wa`, stats recording, sitemap, 41 tests | Sonnet | 201,306 |
+| 5 | Integration: student demo seeder, duplicate-with-computed-column fix, search hint, `APP_EDITION` pinned in phpunit.xml, browser pass (11 pages × 2 widths + admin), decrypt → clean folder → 643/643, `scripts/rotate-key.sh` (tested on a local clone) | Opus | |
+
+Sonnet 392,999. Session counter (00:41 → 01:13): output +132,978 · cost +US$8.33 (counter may lag).
+Not done / to check: university coordinates are approximate; demo travel minutes are placeholders; hreflang
+alternates on /rent?type=sale keep ?type=sale when sale is off; the old cumulative "listing views" stat card still
+shows next to the new monthly cards.

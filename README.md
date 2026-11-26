@@ -28,7 +28,7 @@ php artisan serve                   # http://127.0.0.1:8000
 
 - **Public site:** http://127.0.0.1:8000. It redirects to `/zh-hk`, `/zh-cn` or `/en` based on your browser's language.
 - **Admin panel:** http://127.0.0.1:8000/admin. Demo login `admin@example.com` / `password`. **Change it before going live.**
-- **Tests:** `php artisan test` (554 Pest tests, 146 of them security tests).
+- **Tests:** `php artisan test` (643 Pest tests, 146 of them security tests).
 - **MySQL:** set the `DB_*` values in `.env`, then run `php artisan migrate --seed`.
 - **Placeholders to replace:** agency name, licence numbers, office address and WhatsApp number. Edit them in the admin under **Settings**, or in `database/seeders/data/demo.json` before seeding.
 
@@ -74,6 +74,7 @@ To create real tags from them, run `scripts/make-tags.sh` on your machine.
 | v0.8.0 | Security: Symfony upgrade (composer audit clean), trusted hosts, HTML sanitizer, 13 fixes, 146 security tests, report in `app-src/docs/SECURITY-TESTS.md` |
 | v0.8.1 | Opalstack deploy kit: `deploy/opalstack/` (guide, local Claude manual, deploy/rollback scripts) + `/deploy-opalstack` command |
 | v0.8.2 | Fix: tall sticky side panels (listing enquiry form) now scroll with the page when they don't fit; CSS/JS URLs carry a content hash so caches refresh after deploys |
+| v1.0.0 | Student edition: `APP_EDITION=student-v1` (rentals site, listing management, search). Feature flags in `config/features.php`; room/bed, short lease, bills, 12 universities with travel minutes, daily WhatsApp/WeChat/view stats, real WeChat QR. `scripts/rotate-key.sh` |
 
 ## 3. The static HTML demo
 
