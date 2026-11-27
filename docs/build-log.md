@@ -185,3 +185,13 @@ Agent (Sonnet, 190,842 tokens): ReferenceDataSeeder (production-safe), DemoScale
 36 price changes), DemoStatsSeeder (90 days), InstitutionLinker (haversine walk/transit minutes from approximate station
 coordinates), Region::NewTerritories, demo seeders guarded in production, 7 tests. Opus: New Territories on the rentals
 map and About map, "全港租盤" titles, deploy docs (ReferenceDataSeeder on production). 829/829. migrate:fresh --seed ≈ 7 s.
+
+---
+
+# v1.1.0 maps phase A (2026-11-27 15:22 → ~16:20 HKT)
+Opus: fetch-map.sh (tested: 35 MB in 7 s; --assets 6.5 MB), maps flag, MapData, coordinates migration, deploy wiring
+(shared/maps, 90-day refresh), .pmtiles/.pbf/.mjs MIME + cache in .htaccess/nginx, factory code clash fix.
+Agent A (Sonnet, 111,437): coordinates for 85 stations, 18 districts, all demo listings; admin lat/lng; JSON-LD geo;
+importer; 8 tests. Agent B (Sonnet, 151,137): MapLibre 6.19 (ES modules) + pmtiles 4.5 + basemaps 5.7.2 vendored,
+map.js, rentals map (clusters, price pins, universities, Livewire-safe), listing mini map (lazy), CSP worker-src blob:,
+11 tests, Playwright in 3 locales. 853/853.
