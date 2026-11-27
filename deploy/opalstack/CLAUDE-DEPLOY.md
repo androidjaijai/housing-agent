@@ -147,6 +147,10 @@ Then remind the user of the pre-launch list in `deploy/opalstack/README.md` (dem
   - `curl -sI https://<domain>/vendor/maplibre/maplibre-gl-6.19.0/maplibre-gl.mjs` → `content-type: text/javascript`.
   - Open `/zh-hk/rent?view=map` in a browser: a real map with Chinese place names and price pins.
 - `status` prints the map source date and size from `shared/maps/hong-kong.pmtiles.json`.
+- Listings entered before v1.1.0 have no coordinates (the map then says "N listings have no map position yet").
+  Once, after deploying v1.1.1+: `php artisan db:seed --class=ReferenceDataSeeder --force` (station and district
+  coordinates), then `php artisan listings:fill-coordinates --dry-run`, then without `--dry-run`. It fills only empty
+  coordinates (MTR station point, else district centre) and never moves a listing that already has a position.
 - Feature switch: `FEATURE_MAPS=false` in `.env` returns to the drawn map without removing anything.
 
 ## Rollback
