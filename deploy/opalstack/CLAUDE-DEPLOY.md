@@ -78,21 +78,21 @@ The user edits it ON THE SERVER: `ssh -t $OPAL_SSH nano $OPAL_APP_DIR/shared/.en
 | `APP_URL` | the final `https://domain`; must equal the real domain (host check returns 400 otherwise) |
 | `APP_EDITION` | ASK the user which product this client bought: `full` (complete agency site: enquiries, leads, landlord form, team, blog, tools) or `student-v1` (student rentals: public site, listing management, search by university; everything else switched off). Default in the template is `full`. Single features can be turned back on with `FEATURE_<NAME>=true` (see `config/features.php`). After changing it on a live site run `php artisan optimize`. |
 | `APP_ENV=production`, `APP_DEBUG=false` | fixed |
-| `DB_CONNECTION` | `mariadb` (`mysql` also works) |
-| `DB_HOST`, `DB_PORT` | dashboard / docs. VERIFY, do not assume `127.0.0.1` |
+| `DB_CONNECTION` | `mysql` (NOT `mariadb`: that driver makes backups call `mariadb-dump`, which Opalstack does not have) |
+| `DB_HOST`, `DB_PORT` | `localhost` / `3306` (verify in the dashboard) |
 | `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD` | dashboard database + user |
-| `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`, `MAIL_FROM_ADDRESS` | Opalstack mailbox. VERIFY host/port; example file has a placeholder `smtp.example.com` |
+| `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`, `MAIL_FROM_ADDRESS` | Opalstack mail user: `smtp.us.opalstack.com`, `587`; `MAIL_USERNAME` is the mail user's name, not the address |
 | `MAIL_ADMIN_ADDRESS` | user's address for backup alerts |
 | `SESSION_DRIVER`, `CACHE_STORE`, `QUEUE_CONNECTION` | `database` |
 | `SESSION_SECURE_COOKIE`, `FORCE_HTTPS` | `true` |
-| `TRUSTED_PROXIES` | `127.0.0.1` first; see Step 6 |
+| `TRUSTED_PROXIES` | leave empty; set only if HTTPS detection fails (Step 6) |
 | `TURNSTILE_SITE_KEY` / `TURNSTILE_SECRET_KEY` | optional, Cloudflare Turnstile; empty disables |
 | GA4 id | optional; set in admin Settings, not `.env` |
 | `ANTHROPIC_API_KEY` | optional (AI translation); user's own key |
 | `BACKUP_DISK` | `backups` (local) minimum; recommend `backups,s3` with `AWS_*` set for off-server copies |
 | `BACKUP_ARCHIVE_PASSWORD` | optional; user stores it in a password manager |
 | `HEALTH_REQUIRE_SCHEDULER` | `true` is fine, but `/health` shows failing until cron is installed (Step 7); set `false` temporarily if needed |
-| `SECURITY_CSP_REPORT_ONLY` | `true` for the first week |
+| `SECURITY_CSP_REPORT_ONLY` | `false` (enforced; the template default). `true` only to trial a CSP change |
 
 ## Step 5: first deploy
 
@@ -107,8 +107,9 @@ The user edits it ON THE SERVER: `ssh -t $OPAL_SSH nano $OPAL_APP_DIR/shared/.en
 
 ## Step 6: web routing and HTTPS
 
-- In the dashboard the Symlink app must point to `$OPAL_APP_DIR/current/public` (the user does this; give the exact path). Site routes `/` to that app, Let's Encrypt on, HTTPS redirect on.
+- The app must be type **PHP-FPM Apache Symlink (SLP)** (Laravel's `.htaccess` needs Apache), with `$OPAL_APP_DIR` outside `~/apps`. In the dashboard the Symlink app must point to `$OPAL_APP_DIR/current/public` (the user does this; give the exact path). Site routes `/` to that app, Let's Encrypt on, HTTPS redirect on.
 - Check: `curl -sSI $OPAL_URL/`, then check HTTPS-generated URLs (links in HTML start with `https://`, no `http://`), and that login at `/admin` works without a redirect loop. The app must see `request()->isSecure()` true.
+- Optional basic auth: put `shared/.htaccess-auth` (Apache auth block that exempts `/health`) and `shared/.htpasswd` on the server, both `chmod 644`. Every deploy prepends `.htaccess-auth` to `public/.htaccess`; deleting it removes the gate on the next deploy.
 - Set `TRUSTED_PROXIES` ONLY if needed (e.g. the app sees http behind the proxy): ask the user to check with Opalstack for the proxy address; never use `*`. After editing `.env`: `ssh $OPAL_SSH "cd $OPAL_APP_DIR/current && $OPAL_PHP artisan optimize:clear && $OPAL_PHP artisan optimize"`.
 
 ## Step 7: cron
@@ -163,6 +164,10 @@ Ask approval, then `deploy/opalstack/opalstack-deploy.sh rollback` (points `curr
 | `composer install` killed / memory | `COMPOSER_MEMORY_LIMIT=-1` in the command; retry once; otherwise report |
 | Symlink app 403/404 | the symlink path must be exactly `$OPAL_APP_DIR/current/public`; `ssh $OPAL_SSH "ls -l $OPAL_APP_DIR/current; ls $OPAL_APP_DIR/current/public"`; site route URI `/` |
 | Redirect loop / mixed content | `TRUSTED_PROXIES` (Step 6), `FORCE_HTTPS=true`, `APP_URL` is https, `SESSION_SECURE_COOKIE=true`; then `optimize:clear` |
+| Whole site 403 | `shared/` must be `711` (Apache runs as another user and follows `/storage`, `/maps` and `.htpasswd` through it); `public/.htaccess`, `.htaccess-auth` and `.htpasswd` must be `644`. The deploy script sets 711 and the `.htaccess` mode |
+| `/storage/...` or `/maps/...` 403 | same: `stat -c %a $OPAL_APP_DIR/shared` must be 711 |
+| Backup fails: `mariadb-dump` not found | `DB_CONNECTION=mysql` in `.env`, then `optimize` |
+| HTTPS handshake failure behind Cloudflare | proxied second-level subdomain is not covered by Universal SSL: set the record to DNS only |
 | 400 on the real domain | `APP_URL` host differs from the requested host |
 | Emails / queue idle | cron missing or failing: `crontab -l`, run `cron`, check `queue:work` output; `/health` scheduler status |
 | `/health` 503 | read the JSON checks; scheduler (cron), queue size, disk free, DB |
