@@ -34,8 +34,14 @@ current_name() { local t; t="$(readlink "$CUR" 2>/dev/null || true)"; [ -n "$t" 
 release_names() { [ -d "$REL" ] && ls -1 "$REL" | grep -E '^[0-9]{14}$' | sort -r || true; }
 
 switch_to() { # <release name>
+  local old
+  old="$(current_name)"
   ln -sfn "releases/$1" "$APP/current.tmp"
   mv -T "$APP/current.tmp" "$CUR"
+  # opcache (revalidate_path=0) keeps running the OLD release's public/index.php for current/public/index.php: it
+  # only re-checks the old file's mtime, and every release has the same mtime (fixed in the archive). Touching it
+  # forces a recompile, which resolves the symlink again. Without this the web keeps serving the old release.
+  if [ -n "$old" ] && [ "$old" != "$1" ] && [ -f "$REL/$old/public/index.php" ]; then touch "$REL/$old/public/index.php"; fi
 }
 
 artisan_has() { "$PHP" artisan list --raw 2>/dev/null | awk '{print $1}' | grep -qx "$1"; }
@@ -137,7 +143,6 @@ cmd_activate() {
 
   PREV_RELEASE="$previous" prune
   log "Deployed $ts (previous: ${previous:-none})"
-  echo "Note: PHP-FPM opcache may serve the old code for a short while (realpath cache); it refreshes by itself within ~2 minutes."
 }
 
 cmd_rollback() {

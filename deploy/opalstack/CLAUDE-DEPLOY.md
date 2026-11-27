@@ -168,6 +168,7 @@ Ask approval, then `deploy/opalstack/opalstack-deploy.sh rollback` (points `curr
 | `composer install` killed / memory | `COMPOSER_MEMORY_LIMIT=-1` in the command; retry once; otherwise report |
 | Symlink app 403/404 | the symlink path must be exactly `$OPAL_APP_DIR/current/public`; `ssh $OPAL_SSH "ls -l $OPAL_APP_DIR/current; ls $OPAL_APP_DIR/current/public"`; site route URI `/` |
 | Redirect loop / mixed content | `TRUSTED_PROXIES` (Step 6), `FORCE_HTTPS=true`, `APP_URL` is https, `SESSION_SECURE_COOKIE=true`; then `optimize:clear` |
+| Old code / old `.env` values still served after a deploy (minutes later) | opcache keeps the previous release's `public/index.php` (identical mtimes, `revalidate_path=0`). `switch_to` touches it; if it still happens: `touch $OPAL_APP_DIR/releases/<previous>/public/index.php` |
 | Whole site 403 | `shared/` must be `711` (Apache runs as another user and follows `/storage`, `/maps` and `.htpasswd` through it); `public/.htaccess`, `.htaccess-auth` and `.htpasswd` must be `644`. The deploy script sets 711 and the `.htaccess` mode |
 | `/storage/...` or `/maps/...` 403 | same: `stat -c %a $OPAL_APP_DIR/shared` must be 711 |
 | Backup fails: `mariadb-dump` not found | `DB_CONNECTION=mysql` in `.env`, then `optimize` |

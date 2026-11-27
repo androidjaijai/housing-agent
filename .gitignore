@@ -12,3 +12,4 @@ age-key*.txt
 !/keys/recipient.txt
 .DS_Store
 /deploy/opalstack/*.env
+/agent-notes/
