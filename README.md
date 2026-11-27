@@ -28,7 +28,7 @@ php artisan serve                   # http://127.0.0.1:8000
 
 - **Public site:** http://127.0.0.1:8000. It redirects to `/zh-hk`, `/zh-cn` or `/en` based on your browser's language.
 - **Admin panel:** http://127.0.0.1:8000/admin. Demo login `admin@example.com` / `password`. **Change it before going live.**
-- **Tests:** `php artisan test` (829 Pest tests, 316 of them security tests).
+- **Tests:** `php artisan test` (833 Pest tests, 316 of them security tests).
 - **MySQL:** set the `DB_*` values in `.env`, then run `php artisan migrate --seed`.
 - **Placeholders to replace:** agency name, licence numbers, office address and WhatsApp number. Edit them in the admin under **Settings**, or in `database/seeders/data/demo.json` before seeding.
 
@@ -79,6 +79,7 @@ To create real tags from them, run `scripts/make-tags.sh` on your machine.
 | v1.0.2 | Student polish: student hero copy (繁/简/EN), language links drop `?type=sale` when sale is off, all-time views card hidden in student edition. University coordinate check list in `notes/plans/` |
 | v1.0.3 | Seed data: production-safe `ReferenceDataSeeder` (18 districts incl. New Territories, 8 MTR lines / 85 stations, glossary, default settings); large deterministic demo (279 listings, 72 rooms/beds, 456 leads, 90 days of stats, distance-based university links); demo seeders refuse to run in production |
 | v1.0.4 | Demo seeders blocked in production even with `--force` (only `DEMO_SEED_ALLOW_PRODUCTION=true`, read via config); deploy guides explain choosing `APP_EDITION` (full or student-v1) |
+| v1.0.5 | Fixes from scanning the Opalstack staging: trailing-slash redirects stay on https (middleware instead of .htaccess), nosniff + HSTS on static files via .htaccess, env templates enforce the CSP |
 
 ## 3. The static HTML demo
 
