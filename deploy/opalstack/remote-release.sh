@@ -73,6 +73,7 @@ cmd_activate() {
   rm -rf "$rel/storage"
   ln -s "$SHARED/storage" "$rel/storage"
   ln -sfn "$SHARED/.env" "$rel/.env"
+  chmod 711 "$SHARED"  # Apache (another user) must traverse it to reach storage/, maps/ and .htpasswd
   mkdir -p "$rel/bootstrap/cache"
 
   # Self-hosted map: lives in shared/maps (not in git, not in each release). Download only when missing or older
@@ -86,6 +87,14 @@ cmd_activate() {
       || echo "WARNING: map download failed; the site will show the drawn map until the next deploy." >&2
   fi
   cd "$rel"
+
+  # Optional HTTP basic auth: shared/.htaccess-auth is prepended to Laravel's public/.htaccess (needs an Apache app, SLP).
+  if [ -f "$SHARED/.htaccess-auth" ]; then
+    log "Prepending shared/.htaccess-auth (basic auth) to public/.htaccess"
+    { cat "$SHARED/.htaccess-auth"; echo; cat "$rel/public/.htaccess"; } > "$rel/public/.htaccess.new"
+    mv "$rel/public/.htaccess.new" "$rel/public/.htaccess"
+  fi
+  chmod 644 "$rel/public/.htaccess"  # Apache can't read a 600 .htaccess: whole site 403
 
   log "composer install --no-dev"
   COMPOSER_MEMORY_LIMIT=-1 "$COMPOSER" install --no-dev --no-interaction --prefer-dist --optimize-autoloader

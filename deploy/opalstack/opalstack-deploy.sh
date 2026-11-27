@@ -178,7 +178,9 @@ cmd_first_run() {
     mkdir -p "$a/releases" "$a/shared/storage/app/public" "$a/shared/storage/app/private" \
       "$a/shared/storage/framework/cache/data" "$a/shared/storage/framework/sessions" \
       "$a/shared/storage/framework/views" "$a/shared/storage/logs" "$a/shared/maps"
-    chmod 700 "$a/shared"' _ "$OPAL_APP_DIR" </dev/null
+    # 711, not 700: Apache must traverse shared/ to follow the /storage and /maps symlinks and read .htpasswd.
+    # .env stays 600, so nothing is exposed.
+    chmod 711 "$a/shared"' _ "$OPAL_APP_DIR" </dev/null
   if rcmd test -f "$OPAL_APP_DIR/shared/.env" </dev/null; then
     log "shared/.env already exists; left untouched"
   else

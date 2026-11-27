@@ -11,4 +11,4 @@ age-key*.txt
 /keys/*
 !/keys/recipient.txt
 .DS_Store
-/deploy/opalstack/opalstack.env
+/deploy/opalstack/*.env

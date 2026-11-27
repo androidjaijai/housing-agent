@@ -16,11 +16,12 @@
 具體畫面同選項可能會變，以 Opalstack 當時嘅介面同 https://docs.opalstack.com 為準。
 
 1. **Shell user + SSH key**：開一個 shell user，將你嘅 SSH 公鑰加落去。本機試 `ssh <user>@<server>` 登入到先繼續。
-2. **App（類型 `PHP-FPM Nginx Symlink`）**：揀 **PHP 8.3 或以上**。Laravel 13 最低要 8.3；如果控制台冇 8.3，**停低**，開 support ticket 問 Opalstack，或者轉其他主機。Symlink 目標填 `/home/<user>/apps/housing_agent/current/public`（`housing_agent` 就係你之後設嘅 `OPAL_APP_DIR`）。參考：https://docs.opalstack.com/topic-guides/symlinks/
+2. **App（類型 `PHP-FPM Apache Symlink`，即 SLP）**：要 Apache 先讀到 Laravel 嘅 `.htaccess`（Nginx Symlink 唔得）。揀 **PHP 8.4**（最低 8.3）；冇嘅話**停低**，開 support ticket 問 Opalstack。Symlink 目標填 `/home/<user>/housing_agent/current/public`（`/home/<user>/housing_agent` 就係你之後設嘅 `OPAL_APP_DIR`；唔好放喺 `~/apps` 入面）。參考：https://docs.opalstack.com/topic-guides/symlinks/
 3. **Site**：加你嘅域名（例如 `www.example.com`），Routes 嘅 URI `/` 指去上面個 app；開 **Let's Encrypt**（免費 SSL），同埋 **HTTPS redirect**。
 4. **MariaDB 資料庫同用戶**：喺控制台開一個 database 同一個 user，記低資料庫名、用戶名、密碼同主機名（主機名唔好估，抄控制台顯示嗰個）。
-5. **Mailbox**：開一個郵箱（例如 `hello@你嘅域名`），用嚟經 SMTP 寄通知同重設密碼電郵。記低 SMTP 主機、port、用戶名、密碼。
-6. **DNS**：將域名嘅 A 記錄（或 CNAME）指去 Opalstack 俾你嘅 IP / 主機，等生效。有 Let's Encrypt 嘅話，DNS 要先指啱。
+5. **Mailbox**：開一個 mail user 同一個地址（例如 `hello@你嘅域名`，目的地揀個 mail user），用嚟經 SMTP 寄通知同重設密碼電郵。SMTP 係 `smtp.us.opalstack.com` port 587；用戶名係 mail user 個名，唔係電郵地址。
+6. **DNS**：將域名嘅 A 記錄（或 CNAME）指去 Opalstack 俾你嘅 IP / 主機，等生效。有 Let's Encrypt 嘅話，DNS 要先指啱。用 Cloudflare 嘅話，二級子域名（例如 `dev.www.example.com`）要揀 **DNS only**（灰雲）：Cloudflare 免費 SSL 唔包，開橙雲會 HTTPS 失敗。
+7. **（可選）Basic auth 鎖住成個站**：喺 server 放 `shared/.htaccess-auth`（Apache auth 設定，`/health` 要豁免）同 `shared/.htpasswd`，兩個都 `chmod 644`。每次部署會自動加落 `public/.htaccess` 最頂。
 
 （進階：Opalstack 亦有 API，https://my.opalstack.com/api/v1/ ，唔係必要。）
 
