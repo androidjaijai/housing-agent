@@ -78,6 +78,7 @@ To create real tags from them, run `scripts/make-tags.sh` on your machine.
 | v1.0.1 | Security update: dependencies patched (composer audit clean), v1.0 security review (7 fixes), OWASP ZAP scan (CSP img-src, nosniff), QR re-encode. Report: `app-src/docs/SECURITY-TESTS.md`; ZAP reports in `notes/security/` |
 | v1.0.2 | Student polish: student hero copy (繁/简/EN), language links drop `?type=sale` when sale is off, all-time views card hidden in student edition. University coordinate check list in `notes/plans/` |
 | v1.0.3 | Seed data: production-safe `ReferenceDataSeeder` (18 districts incl. New Territories, 8 MTR lines / 85 stations, glossary, default settings); large deterministic demo (279 listings, 72 rooms/beds, 456 leads, 90 days of stats, distance-based university links); demo seeders refuse to run in production |
+| v1.0.4 | Demo seeders blocked in production even with `--force` (only `DEMO_SEED_ALLOW_PRODUCTION=true`, read via config); deploy guides explain choosing `APP_EDITION` (full or student-v1) |
 
 ## 3. The static HTML demo
 
