@@ -135,6 +135,20 @@ Then remind the user of the pre-launch list in `deploy/opalstack/README.md` (dem
 
 `git pull` (or `SKIP_GIT_UPDATE=1`), `preflight`, `deploy --dry-run`, ask approval, `deploy`, repeat Step 8 quickly. Needing new `.env` keys: tell the user which, they edit on the server.
 
+
+## Map (v1.1.0+)
+- Every deploy runs `fetch-map.sh` on the server: the Hong Kong map (~35 MB) and fonts/icons (~6.5 MB) go to
+  `$OPAL_APP_DIR/shared/maps` and `public/maps` links there. It downloads only when missing or older than 90 days
+  (`MAP_MAX_AGE_DAYS`), and a failure only leaves the drawn map in place (the deploy continues). `SKIP_MAP=1` skips it.
+- The server needs outbound HTTPS to `github.com` (pmtiles tool, first time) and `build.protomaps.com` (map data).
+- After deploy, verify with curl (basic auth if the site has it):
+  - `curl -sI -r 0-99 https://<domain>/maps/hong-kong.pmtiles` → `206 Partial Content` (byte ranges are required; a
+    `200` with the whole file means the map cannot load — report it).
+  - `curl -sI https://<domain>/vendor/maplibre/maplibre-gl-6.19.0/maplibre-gl.mjs` → `content-type: text/javascript`.
+  - Open `/zh-hk/rent?view=map` in a browser: a real map with Chinese place names and price pins.
+- `status` prints the map source date and size from `shared/maps/hong-kong.pmtiles.json`.
+- Feature switch: `FEATURE_MAPS=false` in `.env` returns to the drawn map without removing anything.
+
 ## Rollback
 
 Ask approval, then `deploy/opalstack/opalstack-deploy.sh rollback` (points `current` at the previous release, `queue:restart`). Then check `/health`. DB migrations are not undone; if a migration was the problem, stop and report; the pre-migrate backup is in the backups disk (`php artisan backup:list`). Do not restore without explicit user approval.
