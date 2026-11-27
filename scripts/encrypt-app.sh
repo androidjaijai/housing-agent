@@ -17,7 +17,7 @@ tar --sort=name --owner=0 --group=0 --numeric-owner --mtime='2026-01-01 00:00:00
   --exclude='./database/*.sqlite' --exclude='./database/*.sqlite-journal' \
   --exclude='./storage/logs/*.log' --exclude='./storage/framework/cache/data/*' \
   --exclude='./storage/framework/sessions/*' --exclude='./storage/framework/views/*.php' \
-  --exclude='./storage/app/public/*' --exclude='./public/storage' --exclude='./bootstrap/cache/*.php' \
+  --exclude='./storage/app/public/*' --exclude='./public/storage' --exclude='./public/maps' --exclude='./bootstrap/cache/*.php' \
   --exclude='./.phpunit.cache' --exclude='./.phpunit.result.cache' --exclude='./tests/Browser/screenshots' \
   -czf "$tmp" -C app-src .
 

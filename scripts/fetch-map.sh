@@ -13,6 +13,7 @@
 #   --source URL|FILE  a .pmtiles world build (default: the newest daily build found on build.protomaps.com)
 #   --max-age DAYS     skip when the existing file is younger than this (default: 0 = always download)
 #   --pmtiles PATH     pmtiles CLI to use (default: found on PATH, else downloaded to ~/.local/bin)
+#   --pmtiles-version V  go-pmtiles release to download when needed (default: 1.31.2, or env PMTILES_VERSION)
 #   --dry-run          print what would happen, download nothing
 #
 # Writes OUT.json next to the map with the source build, bbox, zoom, size and sha256. Map data © OpenStreetMap
@@ -26,6 +27,7 @@ maxzoom=15
 source=""
 max_age=0
 pmtiles_bin=""
+pmtiles_version="${PMTILES_VERSION:-1.31.2}"
 dry=0
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -35,8 +37,9 @@ while [ $# -gt 0 ]; do
     --source) source="$2"; shift 2 ;;
     --max-age) max_age="$2"; shift 2 ;;
     --pmtiles) pmtiles_bin="$2"; shift 2 ;;
+    --pmtiles-version) pmtiles_version="$2"; shift 2 ;;
     --dry-run) dry=1; shift ;;
-    -h|--help) sed -n '2,22p' "$0"; exit 0 ;;
+    -h|--help) sed -n '2,23p' "$0"; exit 0 ;;
     *) echo "Unknown option: $1 (see --help)" >&2; exit 1 ;;
   esac
 done
@@ -69,9 +72,14 @@ find_pmtiles() {
   case "$(uname -m)" in x86_64|amd64) arch=x86_64 ;; arm64|aarch64) arch=arm64 ;; *) die "unsupported CPU $(uname -m)" ;; esac
   say "Downloading the pmtiles tool for $os/$arch …"
   [ "$dry" = 1 ] && { pmtiles_bin="$HOME/.local/bin/pmtiles"; say "  (dry run) would install to $pmtiles_bin"; return; }
-  json="$(curl -fsSL https://api.github.com/repos/protomaps/go-pmtiles/releases/latest)" || die "cannot reach api.github.com"
-  url="$(printf '%s' "$json" | grep -oE "https://[^\"]+_${os}_${arch}\.(tar\.gz|zip)" | head -n 1)"
-  [ -n "$url" ] || die "no go-pmtiles release asset for ${os}_${arch}"
+  # Pinned release (reproducible; GitHub's API is often rate-limited or blocked). Asset names differ per platform:
+  # Linux go-pmtiles_<v>_Linux_<arch>.tar.gz, macOS go-pmtiles-<v>_Darwin_<arch>.zip
+  [[ "$pmtiles_version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || die "--pmtiles-version must look like 1.31.2"
+  if [ "$os" = Darwin ]; then
+    url="https://github.com/protomaps/go-pmtiles/releases/download/v${pmtiles_version}/go-pmtiles-${pmtiles_version}_${os}_${arch}.zip"
+  else
+    url="https://github.com/protomaps/go-pmtiles/releases/download/v${pmtiles_version}/go-pmtiles_${pmtiles_version}_${os}_${arch}.tar.gz"
+  fi
   tmp="$(mktemp -d)"
   curl -fsSL -o "$tmp/pm.archive" "$url" || die "download failed: $url"
   case "$url" in *.zip) (cd "$tmp" && unzip -q pm.archive) ;; *) tar -xzf "$tmp/pm.archive" -C "$tmp" ;; esac
