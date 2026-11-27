@@ -76,6 +76,7 @@ The user edits it ON THE SERVER: `ssh -t $OPAL_SSH nano $OPAL_APP_DIR/shared/.en
 |---|---|
 | `APP_KEY` | generate: `php artisan key:generate --show` from a decrypted local copy (`scripts/decrypt-app.sh "$AGE_KEY_FILE" /tmp/xx`, then delete it), or on the server inside a release dir after first deploy. The user pastes it; do not log it. |
 | `APP_URL` | the final `https://domain`; must equal the real domain (host check returns 400 otherwise) |
+| `APP_EDITION` | ASK the user which product this client bought: `full` (complete agency site: enquiries, leads, landlord form, team, blog, tools) or `student-v1` (student rentals: public site, listing management, search by university; everything else switched off). Default in the template is `full`. Single features can be turned back on with `FEATURE_<NAME>=true` (see `config/features.php`). After changing it on a live site run `php artisan optimize`. |
 | `APP_ENV=production`, `APP_DEBUG=false` | fixed |
 | `DB_CONNECTION` | `mariadb` (`mysql` also works) |
 | `DB_HOST`, `DB_PORT` | dashboard / docs. VERIFY, do not assume `127.0.0.1` |

@@ -24,6 +24,17 @@
 
 （進階：Opalstack 亦有 API，https://my.opalstack.com/api/v1/ ，唔係必要。）
 
+## 揀版本（一套程式碼，兩個版本）
+
+部署之前要決定呢個客用邊個版本，Claude 填 `.env` 嗰陣會問你：
+
+| `.env` 設定 | 版本 | 有乜 |
+|---|---|---|
+| `APP_EDITION=full`（預設） | 完整版 | 前台、盤源、查詢表格同客戶名單、業主放盤、多經紀同佣金、文章、計算機等全部功能 |
+| `APP_EDITION=student-v1` | 學生租盤版 | 前台、盤源管理、按大學搜尋（房間／床位、最短租期、包水電、步行分鐘）、WhatsApp 同 WeChat；其他功能收埋 |
+
+學生版想開返個別功能，可以加一行，例如 `FEATURE_LEADS=true` 開返查詢表格同客戶名單。改完要喺 server 行一次 `php artisan optimize`。
+
 ## 點樣叫本機 Claude 部署
 
 ```bash
