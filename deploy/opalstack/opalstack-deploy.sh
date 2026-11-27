@@ -177,7 +177,7 @@ cmd_first_run() {
     a=$1
     mkdir -p "$a/releases" "$a/shared/storage/app/public" "$a/shared/storage/app/private" \
       "$a/shared/storage/framework/cache/data" "$a/shared/storage/framework/sessions" \
-      "$a/shared/storage/framework/views" "$a/shared/storage/logs"
+      "$a/shared/storage/framework/views" "$a/shared/storage/logs" "$a/shared/maps"
     chmod 700 "$a/shared"' _ "$OPAL_APP_DIR" </dev/null
   if rcmd test -f "$OPAL_APP_DIR/shared/.env" </dev/null; then
     log "shared/.env already exists; left untouched"
@@ -246,6 +246,8 @@ cmd_deploy() {
   log "Decrypting locally (release $ts)"
   decrypt_to "$stage"
   cp "$SELF_DIR/remote-release.sh" "$stage/remote-release.sh"
+  # The map download helper runs on the server (see remote-release.sh); it reads only the Hong Kong area.
+  cp "$REPO_ROOT/scripts/fetch-map.sh" "$stage/fetch-map.sh"
 
   if is_local; then dest="$OPAL_APP_DIR/releases/$ts/"; else dest="$OPAL_SSH:$OPAL_APP_DIR/releases/$ts/"; fi
   local rs=(-rlptz --delete --exclude=/vendor --exclude=/node_modules --exclude=/.env --exclude=/storage

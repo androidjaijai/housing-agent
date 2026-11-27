@@ -74,6 +74,17 @@ cmd_activate() {
   ln -s "$SHARED/storage" "$rel/storage"
   ln -sfn "$SHARED/.env" "$rel/.env"
   mkdir -p "$rel/bootstrap/cache"
+
+  # Self-hosted map: lives in shared/maps (not in git, not in each release). Download only when missing or older
+  # than 90 days. A failure here only means the site keeps the drawn map, so it does not stop the deploy.
+  mkdir -p "$SHARED/maps"
+  rm -rf "$rel/public/maps"
+  ln -s "$SHARED/maps" "$rel/public/maps"
+  if [ -f "$rel/fetch-map.sh" ] && [ "${SKIP_MAP:-0}" != 1 ]; then
+    log "Map data (shared/maps)"
+    bash "$rel/fetch-map.sh" --out "$SHARED/maps/hong-kong.pmtiles" --max-age "${MAP_MAX_AGE_DAYS:-90}" --assets \
+      || echo "WARNING: map download failed; the site will show the drawn map until the next deploy." >&2
+  fi
   cd "$rel"
 
   log "composer install --no-dev"
@@ -145,6 +156,7 @@ cmd_status() {
     if [ "$n" = "$cur" ]; then echo "  * $n (current)"; else echo "    $n"; fi
   done
   [ -f "$SHARED/.env" ] && echo "shared/.env: present" || echo "shared/.env: MISSING"
+  if [ -s "$SHARED/maps/hong-kong.pmtiles.json" ]; then echo "map: $(cat "$SHARED/maps/hong-kong.pmtiles.json")"; else echo "map: not downloaded (drawn map in use)"; fi
 }
 
 case "${1:-}" in

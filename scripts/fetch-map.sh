@@ -14,6 +14,8 @@
 #   --max-age DAYS     skip when the existing file is younger than this (default: 0 = always download)
 #   --pmtiles PATH     pmtiles CLI to use (default: found on PATH, else downloaded to ~/.local/bin)
 #   --pmtiles-version V  go-pmtiles release to download when needed (default: 1.31.2, or env PMTILES_VERSION)
+#   --assets           also download map fonts (Latin only; Chinese uses the visitor's own fonts) and icons to
+#                      <dir of --out>/assets (skipped when already there)
 #   --dry-run          print what would happen, download nothing
 #
 # Writes OUT.json next to the map with the source build, bbox, zoom, size and sha256. Map data © OpenStreetMap
@@ -28,6 +30,7 @@ source=""
 max_age=0
 pmtiles_bin=""
 pmtiles_version="${PMTILES_VERSION:-1.31.2}"
+assets=0
 dry=0
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -38,8 +41,9 @@ while [ $# -gt 0 ]; do
     --max-age) max_age="$2"; shift 2 ;;
     --pmtiles) pmtiles_bin="$2"; shift 2 ;;
     --pmtiles-version) pmtiles_version="$2"; shift 2 ;;
+    --assets) assets=1; shift ;;
     --dry-run) dry=1; shift ;;
-    -h|--help) sed -n '2,23p' "$0"; exit 0 ;;
+    -h|--help) sed -n '2,25p' "$0"; exit 0 ;;
     *) echo "Unknown option: $1 (see --help)" >&2; exit 1 ;;
   esac
 done
@@ -52,11 +56,38 @@ die() { printf 'fetch-map: %s\n' "$*" >&2; exit 1; }
 [[ "$max_age" =~ ^[0-9]+$ ]] || die "--max-age must be a number of days"
 command -v curl >/dev/null || die "curl is required"
 
+# Map fonts (glyph ranges) and icons from the Protomaps basemaps-assets site, stored next to the map so the page
+# loads nothing from third parties. Only Latin ranges: MapLibre draws Chinese with the visitor's own fonts.
+fetch_assets() {
+  local dir base font range start ok=0 failed=0
+  dir="$(dirname "$out")/assets"
+  base="https://protomaps.github.io/basemaps-assets"
+  if [ -s "$dir/sprites/v4/light.json" ] && [ -s "$dir/fonts/Noto Sans Regular/0-255.pbf" ]; then
+    say "Map fonts and icons already present: $dir"; return
+  fi
+  say "Downloading map fonts and icons to $dir …"
+  [ "$dry" = 1 ] && { say "  (dry run) skipped"; return; }
+  mkdir -p "$dir/sprites/v4"
+  for f in light.json light.png light@2x.json light@2x.png; do
+    curl -fsSL -o "$dir/sprites/v4/$f" "$base/sprites/v4/$f" || die "download failed: sprites/v4/$f"
+  done
+  for font in "Noto Sans Regular" "Noto Sans Medium" "Noto Sans Italic"; do
+    mkdir -p "$dir/fonts/$font"
+    for start in $(seq 0 256 8192) 65280; do
+      range="$start-$((start + 255))"
+      if curl -fsSL -o "$dir/fonts/$font/$range.pbf" "$base/fonts/${font// /%20}/$range.pbf"; then ok=$((ok + 1)); else failed=$((failed + 1)); rm -f "$dir/fonts/$font/$range.pbf"; fi
+    done
+  done
+  [ "$ok" -gt 0 ] || die "no font files could be downloaded"
+  say "Fonts: $ok files ($failed ranges not available, which is normal)."
+}
+
 # Skip when the current file is recent enough.
 if [ -s "$out" ] && [ "$max_age" -gt 0 ]; then
   age_days=$(( ( $(date +%s) - $(stat -c %Y "$out" 2>/dev/null || stat -f %m "$out") ) / 86400 ))
   if [ "$age_days" -lt "$max_age" ]; then
     say "Map is $age_days day(s) old (< $max_age): nothing to do. ($out)"
+    [ "$assets" = 1 ] && fetch_assets
     exit 0
   fi
 fi
@@ -134,3 +165,5 @@ cat > "$out.json" <<JSON
 {"source": "$source", "bbox": "$bbox", "maxzoom": $maxzoom, "bytes": $size, "sha256": "$sha", "fetched_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)", "attribution": "© OpenStreetMap contributors"}
 JSON
 say "Done: $(( size / 1024 / 1024 )) MB written to $out"
+[ "$assets" = 1 ] && fetch_assets
+exit 0
